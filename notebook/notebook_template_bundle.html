@@ -1,0 +1,546 @@
+{% extends "base.html" %}
+
+{% block title %}📝 Блокнот{% endblock %}
+
+{% block extra_head %}
+<style>*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}html, body{height:100%;overflow:hidden;background:#0a0a0a;font-family:'Courier New', monospace}.notebook-wrapper{position:relative;width:100%;height:100vh}h1{position:fixed;top:8px;left:16px;color:#daa520;font-size:20px;text-shadow:0 0 15px rgba(218, 165, 32, 0.6);z-index:20;pointer-events:none}.toolbar{position:fixed;top:12px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:8px 14px;background:#1a1a2e;border:2px solid #00ff41;border-radius:14px;box-shadow:0 0 25px rgba(0, 255, 0, 0.3), 0 0 60px rgba(0, 0, 0, 0.8);z-index:10;max-width:calc(100vw - 24px);flex-wrap:wrap;justify-content:center}.tool-group{display:flex;align-items:center;gap:6px}.sep{width:1px;height:24px;background:#00ff41;opacity:0.4}.tool-btn{width:36px;height:36px;background:#000;border:2px solid #00ff41;color:#00ff41;font-size:18px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;box-shadow:0 0 8px rgba(0, 255, 0, 0.25)}.tool-btn:hover:not(:disabled){transform:scale(1.08);box-shadow:0 0 18px rgba(0, 255, 0, 0.6)}.tool-btn:active:not(:disabled){transform:scale(0.92)}.tool-btn.active{background:#00ff41;color:#000;box-shadow:0 0 22px rgba(0, 255, 0, 0.9)}.tool-btn:disabled{opacity:0.3;cursor:not-allowed;box-shadow:none}.tool-btn.danger{border-color:#ff0040;color:#ff0040;box-shadow:0 0 8px rgba(255, 0, 64, 0.3)}.tool-btn.danger:hover{background:#ff0040;color:#000;box-shadow:0 0 22px rgba(255, 0, 64, 0.8)}.palette{gap:4px}.swatch{width:26px;height:26px;border:2px solid #333;border-radius:6px;cursor:pointer;transition:transform 0.15s, border-color 0.15s;padding:0}.swatch:hover{transform:scale(1.15)}.swatch.active{border-color:#fff;box-shadow:0 0 12px rgba(255, 255, 255, 0.8)}.color-picker{width:36px;height:36px;border:2px solid #00ff41;border-radius:8px;background:#000;cursor:pointer;padding:2px;box-shadow:0 0 8px rgba(0, 255, 0, 0.25)}.size-group{gap:8px;color:#00ff41;font-size:12px}.size-icon{font-size:16px}.size-label{min-width:22px;text-align:center;font-weight:bold}input[type="range"]{width:90px;accent-color:#00ff41;cursor:pointer}#board{display:block;position:absolute;inset:0;background:#000;cursor:crosshair;touch-action:none}@media (max-width:780px){h1{display:none}.toolbar{top:8px;gap:6px;padding:6px 10px}.tool-btn{width:32px;height:32px;font-size:16px}.swatch{width:22px;height:22px}.color-picker{width:32px;height:32px}input[type="range"]{width:70px}}</style>
+{% endblock %}
+
+{% block content %}
+<div class="notebook-wrapper">
+    <h1>📝 Блокнот</h1>
+
+    <div class="toolbar" id="toolbar">
+        <div class="tool-group">
+            <button id="btnPen" class="tool-btn active" title="Ручка (E)">✏️</button>
+            <button id="btnEraser" class="tool-btn" title="Ластик (L)">🧽</button>
+        </div>
+        <div class="sep"></div>
+        <div class="tool-group">
+            <button id="btnUndo" class="tool-btn" title="Отменить (Ctrl+Z)">↶</button>
+            <button id="btnRedo" class="tool-btn" title="Повторить (Ctrl+Y)">↷</button>
+        </div>
+        <div class="sep"></div>
+        <div class="tool-group palette" id="palette"></div>
+        <input type="color" id="colorPicker" class="color-picker" title="Свой цвет">
+        <div class="sep"></div>
+        <div class="tool-group size-group">
+            <span class="size-icon">●</span>
+            <input type="range" id="sizeSlider" min="1" max="40" value="3">
+            <span id="sizeLabel" class="size-label">3</span>
+        </div>
+        <div class="sep"></div>
+        <div class="tool-group">
+            <button id="btnGrid" class="tool-btn" title="Сетка (G)">▦</button>
+            <button id="btnClear" class="tool-btn danger" title="Очистить">🗑️</button>
+        </div>
+    </div>
+
+    <canvas id="board"></canvas>
+
+    <a href="/projects" class="back-link">← Назад к проектам</a>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>const CONFIG = {
+    STORAGE_KEY: 'notebook_strokes_v1',
+    HISTORY_LIMIT: 50,
+    
+    DEFAULT_COLOR: '#00ff41',
+    DEFAULT_SIZE: 3,
+    MIN_SIZE: 1,
+    MAX_SIZE: 40,
+    
+    MIN_POINT_DIST: 2,       // минимальное расстояние между точками (px)
+    MAX_POINTS_PER_STROKE: 5000,
+    
+    PALETTE: ['#00ff41', '#ffd700', '#ffffff', '#ff0040', '#00aaff', '#cc44cc'],
+    
+    COLORS: {
+        CANVAS_BG: '#000000',
+        ERASER: '#000000',
+        GRID: '#0a2a0a',
+        GRID_STEP: 24
+    }
+};
+const Storage = {
+    save(strokes) {
+        try {
+            localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(strokes));
+            return true;
+        } catch (e) {
+            console.warn('Storage.save error:', e);
+            return false;
+        }
+    },
+
+    load() {
+        try {
+            const raw = localStorage.getItem(CONFIG.STORAGE_KEY);
+            if (!raw) return [];
+            const data = JSON.parse(raw);
+            return Array.isArray(data) ? data : [];
+        } catch (e) {
+            console.warn('Storage.load error:', e);
+            return [];
+        }
+    },
+
+    clear() {
+        try {
+            localStorage.removeItem(CONFIG.STORAGE_KEY);
+        } catch (e) {
+            console.warn('Storage.clear error:', e);
+        }
+    }
+};
+const Strokes = {
+    list: [],
+    history: [],       // стек для undo
+    redoStack: [],     // стек для redo
+    maxHistory: CONFIG.HISTORY_LIMIT,
+
+    reset() {
+        this.list = [];
+        this.history = [];
+        this.redoStack = [];
+    },
+
+    pushHistory() {
+        this.history.push(JSON.stringify(this.list));
+        if (this.history.length > this.maxHistory) this.history.shift();
+        this.redoStack = [];
+    },
+
+    undo() {
+        if (!this.history.length) return false;
+        this.redoStack.push(JSON.stringify(this.list));
+        this.list = JSON.parse(this.history.pop());
+        return true;
+    },
+
+    redo() {
+        if (!this.redoStack.length) return false;
+        this.history.push(JSON.stringify(this.list));
+        this.list = JSON.parse(this.redoStack.pop());
+        return true;
+    },
+
+    start(color, size, isEraser) {
+        this.pushHistory();
+        const stroke = {
+            c: color,
+            s: size,
+            e: isEraser,
+            p: []
+        };
+        this.list.push(stroke);
+        return stroke;
+    },
+
+    addPoint(stroke, x, y) {
+        if (!stroke || stroke.p.length >= CONFIG.MAX_POINTS_PER_STROKE) return false;
+
+        const px = Math.round(x);
+        const py = Math.round(y);
+        const last = stroke.p[stroke.p.length - 1];
+        if (last) {
+            const dx = px - last.x;
+            const dy = py - last.y;
+            const min = CONFIG.MIN_POINT_DIST;
+            if (dx * dx + dy * dy < min * min) return false;
+        }
+        stroke.p.push({ x: px, y: py });
+        return true;
+    },
+
+    clear() {
+        if (this.list.length) this.pushHistory();
+        this.list = [];
+    },
+
+    // --- сериализация для localStorage ---
+
+    serialize() {
+        return this.list.map(s => ({
+            c: s.c,
+            s: s.s,
+            e: s.e ? 1 : 0,
+            p: s.p.flatMap(pt => [pt.x, pt.y])
+        }));
+    },
+
+    deserialize(data) {
+        this.reset();
+        if (!Array.isArray(data)) return;
+        this.list = data.map(s => {
+            const flat = Array.isArray(s.p) ? s.p : [];
+            const points = [];
+            for (let i = 0; i < flat.length - 1; i += 2) {
+                points.push({ x: flat[i], y: flat[i + 1] });
+            }
+            return {
+                c: s.c || CONFIG.DEFAULT_COLOR,
+                s: s.s || CONFIG.DEFAULT_SIZE,
+                e: !!s.e,
+                p: points
+            };
+        });
+    }
+};
+const Renderer = {
+    canvas: null,
+    ctx: null,
+    dpr: 1,
+    width: 0,
+    height: 0,
+    gridOn: false,
+
+    init(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.resize();
+    },
+
+    resize() {
+        if (!this.canvas) return;
+        const dpr = window.devicePixelRatio || 1;
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+
+        this.dpr = dpr;
+        this.width = w;
+        this.height = h;
+
+        this.canvas.width = Math.floor(w * dpr);
+        this.canvas.height = Math.floor(h * dpr);
+        this.canvas.style.width = w + 'px';
+        this.canvas.style.height = h + 'px';
+
+        this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    },
+
+    clear() {
+        const { ctx, width, height } = this;
+        ctx.clearRect(0, 0, width, height);
+        ctx.fillStyle = CONFIG.COLORS.CANVAS_BG;
+        ctx.fillRect(0, 0, width, height);
+        if (this.gridOn) this.drawGrid();
+    },
+
+    drawGrid() {
+        const { ctx, width, height } = this;
+        const step = CONFIG.COLORS.GRID_STEP;
+        ctx.save();
+        ctx.strokeStyle = CONFIG.COLORS.GRID;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        for (let x = step; x < width; x += step) {
+            ctx.moveTo(x + 0.5, 0);
+            ctx.lineTo(x + 0.5, height);
+        }
+        for (let y = step; y < height; y += step) {
+            ctx.moveTo(0, y + 0.5);
+            ctx.lineTo(width, y + 0.5);
+        }
+        ctx.stroke();
+        ctx.restore();
+    },
+
+    applyStrokeStyle(stroke) {
+        const ctx = this.ctx;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = stroke.e ? CONFIG.COLORS.ERASER : stroke.c;
+        ctx.lineWidth = stroke.s;
+    },
+
+    drawStroke(stroke) {
+        const pts = stroke.p;
+        if (!pts.length) return;
+
+        const ctx = this.ctx;
+        ctx.save();
+        this.applyStrokeStyle(stroke);
+
+        ctx.beginPath();
+        if (pts.length === 1) {
+            // точка — рисуем кружок
+            ctx.arc(pts[0].x, pts[0].y, stroke.s / 2, 0, Math.PI * 2);
+            ctx.fillStyle = stroke.e ? CONFIG.COLORS.ERASER : stroke.c;
+            ctx.fill();
+            ctx.restore();
+            return;
+        }
+
+        ctx.moveTo(pts[0].x, pts[0].y);
+
+        // Сглаживание через квадратичные кривые
+        for (let i = 1; i < pts.length - 1; i++) {
+            const midX = (pts[i].x + pts[i + 1].x) / 2;
+            const midY = (pts[i].y + pts[i + 1].y) / 2;
+            ctx.quadraticCurveTo(pts[i].x, pts[i].y, midX, midY);
+        }
+        const last = pts[pts.length - 1];
+        ctx.lineTo(last.x, last.y);
+        ctx.stroke();
+        ctx.restore();
+    },
+
+    // рисует только последний сегмент (для плавности при движении)
+    drawLastSegment(stroke) {
+        const pts = stroke.p;
+        if (pts.length < 2) {
+            this.drawStroke(stroke);
+            return;
+        }
+
+        const ctx = this.ctx;
+        ctx.save();
+        this.applyStrokeStyle(stroke);
+
+        const n = pts.length;
+        const p0 = pts[n - 3] || pts[0];
+        const p1 = pts[n - 2];
+        const p2 = pts[n - 1];
+        const midX = (p1.x + p2.x) / 2;
+        const midY = (p1.y + p2.y) / 2;
+
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.quadraticCurveTo(p1.x, p1.y, midX, midY);
+        ctx.stroke();
+        ctx.restore();
+    },
+
+    redrawAll(strokes) {
+        this.clear();
+        for (let i = 0; i < strokes.length; i++) {
+            this.drawStroke(strokes[i]);
+        }
+    },
+
+    toggleGrid() {
+        this.gridOn = !this.gridOn;
+        return this.gridOn;
+    }
+};
+const Input = {
+    notebook: null,
+    drawing: false,
+    activeStroke: null,
+
+    init(notebook, canvas) {
+        this.notebook = notebook;
+        this.canvas = canvas;
+
+        canvas.addEventListener('mousedown', this.onDown.bind(this));
+        canvas.addEventListener('mousemove', this.onMove.bind(this));
+        window.addEventListener('mouseup', this.onUp.bind(this));
+        canvas.addEventListener('mouseleave', this.onUp.bind(this));
+
+        canvas.addEventListener('touchstart', this.onDown.bind(this), { passive: false });
+        canvas.addEventListener('touchmove', this.onMove.bind(this), { passive: false });
+        canvas.addEventListener('touchend', this.onUp.bind(this));
+        canvas.addEventListener('touchcancel', this.onUp.bind(this));
+
+        window.addEventListener('keydown', this.onKey.bind(this));
+    },
+
+    pos(e) {
+        const rect = this.canvas.getBoundingClientRect();
+        const cx = e.touches ? e.touches[0].clientX : e.clientX;
+        const cy = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: cx - rect.left, y: cy - rect.top };
+    },
+
+    onDown(e) {
+        e.preventDefault();
+        const t = this.notebook.toolbar;
+        const { x, y } = this.pos(e);
+
+        this.drawing = true;
+        this.activeStroke = Strokes.start(t.color, t.size, t.tool === 'eraser');
+        Strokes.addPoint(this.activeStroke, x, y);
+        Renderer.drawStroke(this.activeStroke);
+    },
+
+    onMove(e) {
+        if (!this.drawing) return;
+        e.preventDefault();
+        const { x, y } = this.pos(e);
+        const added = Strokes.addPoint(this.activeStroke, x, y);
+        if (added) {
+            Renderer.drawLastSegment(this.activeStroke);
+        }
+    },
+
+    onUp() {
+        if (!this.drawing) return;
+        this.drawing = false;
+        this.activeStroke = null;
+        this.notebook.persist();
+    },
+
+    onKey(e) {
+        if (e.target.tagName === 'INPUT') return;
+        const k = e.key.toLowerCase();
+        const t = this.notebook.toolbar;
+
+        if (k === 'e' || k === 'у') t.setTool('pen');
+        else if (k === 'l' || k === 'д') t.setTool('eraser');
+        else if ((e.ctrlKey || e.metaKey) && k === 'z') {
+            e.preventDefault();
+            this.notebook.undo();
+        } else if ((e.ctrlKey || e.metaKey) && (k === 'y' || (k === 'z' && e.shiftKey))) {
+            e.preventDefault();
+            this.notebook.redo();
+        } else if (k === 'g' || k === 'п') {
+            this.notebook.toggleGrid();
+        }
+    }
+};
+const Toolbar = {
+    tool: 'pen',
+    color: CONFIG.DEFAULT_COLOR,
+    size: CONFIG.DEFAULT_SIZE,
+    notebook: null,
+
+    init(notebook) {
+        this.notebook = notebook;
+
+        this.penBtn = document.getElementById('btnPen');
+        this.eraserBtn = document.getElementById('btnEraser');
+        this.undoBtn = document.getElementById('btnUndo');
+        this.redoBtn = document.getElementById('btnRedo');
+        this.clearBtn = document.getElementById('btnClear');
+        this.gridBtn = document.getElementById('btnGrid');
+        this.colorInput = document.getElementById('colorPicker');
+        this.sizeInput = document.getElementById('sizeSlider');
+        this.sizeLabel = document.getElementById('sizeLabel');
+        this.paletteEl = document.getElementById('palette');
+
+        // Инструменты
+        this.penBtn.onclick = () => this.setTool('pen');
+        this.eraserBtn.onclick = () => this.setTool('eraser');
+
+        // Действия
+        this.undoBtn.onclick = () => notebook.undo();
+        this.redoBtn.onclick = () => notebook.redo();
+        this.clearBtn.onclick = () => {
+            if (confirm('Очистить весь блокнот?')) notebook.clearAll();
+        };
+        this.gridBtn.onclick = () => notebook.toggleGrid();
+
+        // Цвет
+        this.colorInput.value = this.color;
+        this.colorInput.oninput = (e) => {
+            this.color = e.target.value;
+            this.setTool('pen');
+            this.highlightSwatch(null);
+        };
+
+        // Толщина
+        this.sizeInput.value = this.size;
+        this.sizeLabel.textContent = this.size;
+        this.sizeInput.oninput = (e) => {
+            this.size = Number(e.target.value);
+            this.sizeLabel.textContent = this.size;
+        };
+
+        // Палитра-свотчи
+        this.buildPalette();
+        this.setTool('pen');
+        this.updateUndoRedo();
+    },
+
+    buildPalette() {
+        this.paletteEl.innerHTML = '';
+        CONFIG.PALETTE.forEach(c => {
+            const b = document.createElement('button');
+            b.className = 'swatch';
+            b.style.background = c;
+            b.dataset.color = c;
+            b.title = c;
+            b.onclick = () => {
+                this.color = c;
+                this.colorInput.value = c;
+                this.setTool('pen');
+                this.highlightSwatch(c);
+            };
+            this.paletteEl.appendChild(b);
+        });
+        this.highlightSwatch(this.color);
+    },
+
+    highlightSwatch(color) {
+        this.paletteEl.querySelectorAll('.swatch').forEach(el => {
+            el.classList.toggle('active', el.dataset.color === color);
+        });
+    },
+
+    setTool(t) {
+        this.tool = t;
+        this.penBtn.classList.toggle('active', t === 'pen');
+        this.eraserBtn.classList.toggle('active', t === 'eraser');
+    },
+
+    updateUndoRedo() {
+        this.undoBtn.disabled = Strokes.history.length === 0;
+        this.redoBtn.disabled = Strokes.redoStack.length === 0;
+    }
+};
+const Notebook = {
+    init() {
+        this.canvas = document.getElementById('board');
+        Renderer.init(this.canvas);
+        Toolbar.init(this);
+
+        Strokes.deserialize(Storage.load());
+        Renderer.redrawAll(Strokes.list);
+        Toolbar.updateUndoRedo();
+
+        Input.init(this, this.canvas);
+
+        window.addEventListener('resize', () => {
+            Renderer.resize();
+            Renderer.redrawAll(Strokes.list);
+        });
+    },
+
+    persist() {
+        Storage.save(Strokes.serialize());
+        Toolbar.updateUndoRedo();
+    },
+
+    undo() {
+        if (Strokes.undo()) {
+            Renderer.redrawAll(Strokes.list);
+            this.persist();
+        }
+    },
+
+    redo() {
+        if (Strokes.redo()) {
+            Renderer.redrawAll(Strokes.list);
+            this.persist();
+        }
+    },
+
+    clearAll() {
+        Strokes.clear();
+        Renderer.redrawAll(Strokes.list);
+        this.persist();
+    },
+
+    toggleGrid() {
+        const on = Renderer.toggleGrid();
+        Toolbar.gridBtn.classList.toggle('active', on);
+        Renderer.redrawAll(Strokes.list);
+    }
+};
+window.addEventListener('DOMContentLoaded', () => {
+    Notebook.init();
+});</script>
+{% endblock %}
