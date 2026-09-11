@@ -15,37 +15,31 @@
                 <button id="btnPen" class="tool-btn active" title="Ручка (E)">✏️</button>
                 <button id="btnEraser" class="tool-btn" title="Ластик (L)">🧽</button>
             </div>
-
             <div class="sep"></div>
-
             <div class="tool-group">
                 <button id="btnUndo" class="tool-btn" title="Отменить (Ctrl+Z)">↶</button>
                 <button id="btnRedo" class="tool-btn" title="Повторить (Ctrl+Y)">↷</button>
             </div>
-
             <div class="sep"></div>
-
             <div class="tool-group palette" id="palette"></div>
-
             <input type="color" id="colorPicker" class="color-picker" title="Свой цвет">
-
             <div class="sep"></div>
-
             <div class="tool-group size-group">
                 <span class="size-icon">●</span>
                 <input type="range" id="sizeSlider" min="1" max="40" value="3">
                 <span id="sizeLabel" class="size-label">3</span>
             </div>
-
             <div class="sep"></div>
-
             <div class="tool-group">
                 <button id="btnGrid" class="tool-btn" title="Сетка (G)">▦</button>
                 <button id="btnClear" class="tool-btn danger" title="Очистить">🗑️</button>
             </div>
         </div>
 
-        <canvas id="board"></canvas>
+        <!-- ОБЁРНУТО В КОНТЕЙНЕР: canvas растягивается по нему -->
+        <div class="canvas-host">
+            <canvas id="board"></canvas>
+        </div>
     </div>
 
     <script src="js/config.js"></script>

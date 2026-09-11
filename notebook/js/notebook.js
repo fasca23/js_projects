@@ -1,4 +1,7 @@
 const Notebook = {
+    canvas: null,
+    _ro: null,
+
     init() {
         this.canvas = document.getElementById('board');
         Renderer.init(this.canvas);
@@ -10,10 +13,21 @@ const Notebook = {
 
         Input.init(this, this.canvas);
 
-        window.addEventListener('resize', () => {
-            Renderer.resize();
-            Renderer.redrawAll(Strokes.list);
-        });
+        // Реагируем на изменение размеров РОДИТЕЛЯ (контейнера сайта),
+        // а не только окна. Это критично для встраивания.
+        const parent = this.canvas.parentElement;
+        if (window.ResizeObserver) {
+            this._ro = new ResizeObserver(() => {
+                Renderer.resize();
+                Renderer.redrawAll(Strokes.list);
+            });
+            this._ro.observe(parent);
+        } else {
+            window.addEventListener('resize', () => {
+                Renderer.resize();
+                Renderer.redrawAll(Strokes.list);
+            });
+        }
     },
 
     persist() {

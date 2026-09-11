@@ -15,8 +15,13 @@ const Renderer = {
     resize() {
         if (!this.canvas) return;
         const dpr = window.devicePixelRatio || 1;
-        const w = window.innerWidth;
-        const h = window.innerHeight;
+
+        // Размер берём у родителя canvas — это позволяет встраивать блокнот
+        // в любой контейнер (в т.ч. в {% block content %} сайта).
+        const parent = this.canvas.parentElement;
+        const rect = parent.getBoundingClientRect();
+        const w = Math.max(1, Math.floor(rect.width));
+        const h = Math.max(1, Math.floor(rect.height));
 
         this.dpr = dpr;
         this.width = w;

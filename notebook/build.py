@@ -226,9 +226,9 @@ def build_template():
         </div>
     </div>
 
-    <canvas id="board"></canvas>
-
-    <a href="/projects" class="back-link">← Назад к проектам</a>
+    <div class="canvas-host">
+        <canvas id="board"></canvas>
+    </div>
 </div>
 {% endblock %}
 
@@ -241,7 +241,6 @@ def build_template():
 
     write_file('notebook_template_bundle.html', template)
     print(f"\n✅ Собрано в notebook_template_bundle.html")
-
 
 def show_help():
     print("""
