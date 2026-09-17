@@ -1,7 +1,23 @@
 const Toolbar = {
     tool: 'pen',
     color: CONFIG.DEFAULT_COLOR,
-    size: CONFIG.DEFAULT_SIZE,
+
+    // Два независимых размера для каждого инструмента
+    sizes: {
+        pen: CONFIG.DEFAULT_SIZE,
+        eraser: CONFIG.DEFAULT_SIZE * 4   // ластик обычно толще
+    },
+
+    // Геттер: всегда отдаёт размер активного инструмента.
+    // Благодаря этому Input и остальной код продолжают читать Toolbar.size
+    // и ничего менять в других файлах не надо.
+    get size() {
+        return this.sizes[this.tool];
+    },
+    set size(v) {
+        this.sizes[this.tool] = v;
+    },
+
     notebook: null,
 
     init(notebook) {
@@ -38,16 +54,18 @@ const Toolbar = {
             this.highlightSwatch(null);
         };
 
-        // Толщина
-        this.sizeInput.value = this.size;
-        this.sizeLabel.textContent = this.size;
+        // Ползунок толщины — меняет размер ТОЛЬКО активного инструмента
+        this.sizeInput.min = CONFIG.MIN_SIZE;
+        this.sizeInput.max = CONFIG.MAX_SIZE;
         this.sizeInput.oninput = (e) => {
             this.size = Number(e.target.value);
             this.sizeLabel.textContent = this.size;
         };
 
-        // Палитра-свотчи
+        // Палитра
         this.buildPalette();
+
+        // Стартуем с ручки и подтягиваем её сохранённый размер
         this.setTool('pen');
         this.updateUndoRedo();
     },
@@ -81,6 +99,12 @@ const Toolbar = {
         this.tool = t;
         this.penBtn.classList.toggle('active', t === 'pen');
         this.eraserBtn.classList.toggle('active', t === 'eraser');
+
+        // Подтягиваем сохранённый размер для выбранного инструмента
+        // и синхронизируем UI ползунка
+        const s = this.sizes[t];
+        this.sizeInput.value = s;
+        this.sizeLabel.textContent = s;
     },
 
     updateUndoRedo() {
