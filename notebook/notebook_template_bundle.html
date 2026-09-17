@@ -4,7 +4,7 @@
 
 {% block extra_head %}
 {% raw %}
-<style>*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}.notebook-wrapper{position:relative;width:100%;height:calc(100vh - 80px);min-height:480px;display:flex;flex-direction:column;gap:8px;padding:8px 0}h1{text-align:center;color:#daa520;font-size:22px;text-shadow:0 0 15px rgba(218, 165, 32, 0.6);flex:0 0 auto;position:static}.toolbar{position:sticky;top:8px;align-self:center;display:flex;align-items:center;gap:10px;padding:8px 14px;background:#1a1a2e;border:2px solid #00ff41;border-radius:14px;box-shadow:0 0 25px rgba(0, 255, 0, 0.3);z-index:10;max-width:100%;flex-wrap:wrap;justify-content:center;margin:0 auto;flex:0 0 auto}.tool-group{display:flex;align-items:center;gap:6px}.sep{width:1px;height:24px;background:#00ff41;opacity:0.4}.tool-btn{width:36px;height:36px;background:#000;border:2px solid #00ff41;color:#00ff41;font-size:18px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;box-shadow:0 0 8px rgba(0, 255, 0, 0.25);padding:0;line-height:1}.tool-btn:hover:not(:disabled){transform:scale(1.08);box-shadow:0 0 18px rgba(0, 255, 0, 0.6)}.tool-btn:active:not(:disabled){transform:scale(0.92)}.tool-btn.active{background:#00ff41;color:#000;box-shadow:0 0 22px rgba(0, 255, 0, 0.9)}.tool-btn:disabled{opacity:0.3;cursor:not-allowed;box-shadow:none}.tool-btn.danger{border-color:#ff0040;color:#ff0040;box-shadow:0 0 8px rgba(255, 0, 64, 0.3)}.tool-btn.danger:hover{background:#ff0040;color:#000;box-shadow:0 0 22px rgba(255, 0, 64, 0.8)}.palette{gap:4px}.swatch{width:26px;height:26px;border:2px solid #333;border-radius:6px;cursor:pointer;transition:transform 0.15s, border-color 0.15s;padding:0}.swatch:hover{transform:scale(1.15)}.swatch.active{border-color:#fff;box-shadow:0 0 12px rgba(255, 255, 255, 0.8)}.color-picker{width:36px;height:36px;border:2px solid #00ff41;border-radius:8px;background:#000;cursor:pointer;padding:2px;box-shadow:0 0 8px rgba(0, 255, 0, 0.25)}.size-group{gap:8px;color:#00ff41;font-size:12px}.size-icon{font-size:16px}.size-label{min-width:22px;text-align:center;font-weight:bold;color:#00ff41}input[type="range"]{width:90px;accent-color:#00ff41;cursor:pointer}.canvas-host{position:relative;flex:1 1 auto;min-height:200px;border:2px solid #00ff41;border-radius:12px;overflow:hidden;box-shadow:0 0 25px rgba(0, 255, 0, 0.2)}#board{display:block;position:absolute;top:0;left:0;width:100%;height:100%;background:#000;cursor:crosshair;touch-action:none}@media (max-width:780px){.notebook-wrapper{height:calc(100vh - 70px);padding:4px 0;gap:6px}h1{font-size:18px}.toolbar{top:4px;gap:6px;padding:6px 8px;border-radius:12px}.tool-btn{width:32px;height:32px;font-size:15px}.swatch{width:22px;height:22px}.color-picker{width:32px;height:32px}input[type="range"]{width:70px}.sep{height:20px}}.transfer-group{position:relative}.transfer-menu{position:absolute;top:calc(100% + 8px);right:0;display:flex;flex-direction:column;gap:4px;padding:6px;background:#1a1a2e;border:2px solid #00ff41;border-radius:10px;box-shadow:0 0 20px rgba(0, 255, 0, 0.4);z-index:20;min-width:130px}.transfer-menu[hidden]{display:none}.transfer-item{padding:8px 12px;background:#000;border:2px solid #00ff41;color:#00ff41;font-family:'Courier New', monospace;font-size:13px;font-weight:bold;border-radius:6px;cursor:pointer;text-align:left;transition:all 0.15s}.transfer-item:hover{background:#00ff41;color:#000;box-shadow:0 0 12px rgba(0, 255, 0, 0.7)}.transfer-item:active{transform:scale(0.97)}#importFileInput{display:none}@media (max-width:780px){.transfer-menu{min-width:120px;padding:4px}.transfer-item{padding:6px 10px;font-size:12px}}</style>
+<style>*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}.notebook-wrapper{position:relative;width:100%;height:calc(100vh - 80px);min-height:480px;display:flex;flex-direction:column;gap:8px;padding:8px 0}h1{text-align:center;color:#daa520;font-size:22px;text-shadow:0 0 15px rgba(218, 165, 32, 0.6);flex:0 0 auto;position:static}.toolbar{position:sticky;top:8px;align-self:center;display:flex;align-items:center;gap:10px;padding:8px 14px;background:#1a1a2e;border:2px solid #00ff41;border-radius:14px;box-shadow:0 0 25px rgba(0, 255, 0, 0.3);z-index:10;max-width:100%;flex-wrap:wrap;justify-content:center;margin:0 auto;flex:0 0 auto}.tool-group{display:flex;align-items:center;gap:6px}.sep{width:1px;height:24px;background:#00ff41;opacity:0.4}.tool-btn{width:36px;height:36px;background:#000;border:2px solid #00ff41;color:#00ff41;font-size:18px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;box-shadow:0 0 8px rgba(0, 255, 0, 0.25);padding:0;line-height:1}.tool-btn:hover:not(:disabled){transform:scale(1.08);box-shadow:0 0 18px rgba(0, 255, 0, 0.6)}.tool-btn:active:not(:disabled){transform:scale(0.92)}.tool-btn.active{background:#00ff41;color:#000;box-shadow:0 0 22px rgba(0, 255, 0, 0.9)}.tool-btn:disabled{opacity:0.3;cursor:not-allowed;box-shadow:none}.tool-btn.danger{border-color:#ff0040;color:#ff0040;box-shadow:0 0 8px rgba(255, 0, 64, 0.3)}.tool-btn.danger:hover{background:#ff0040;color:#000;box-shadow:0 0 22px rgba(255, 0, 64, 0.8)}.palette{gap:4px}.swatch{width:26px;height:26px;border:2px solid #333;border-radius:6px;cursor:pointer;transition:transform 0.15s, border-color 0.15s;padding:0}.swatch:hover{transform:scale(1.15)}.swatch.active{border-color:#fff;box-shadow:0 0 12px rgba(255, 255, 255, 0.8)}.color-picker{width:36px;height:36px;border:2px solid #00ff41;border-radius:8px;background:#000;cursor:pointer;padding:2px;box-shadow:0 0 8px rgba(0, 255, 0, 0.25)}.size-group{gap:8px;color:#00ff41;font-size:12px}.size-icon{font-size:16px}.size-label{min-width:22px;text-align:center;font-weight:bold;color:#00ff41}input[type="range"]{width:90px;accent-color:#00ff41;cursor:pointer}.canvas-host{position:relative;flex:1 1 auto;min-height:200px;border:2px solid #00ff41;border-radius:12px;overflow:hidden;box-shadow:0 0 25px rgba(0, 255, 0, 0.2)}#board{display:block;position:absolute;top:0;left:0;width:100%;height:100%;background:#000;cursor:crosshair;touch-action:none}@media (max-width:780px){.notebook-wrapper{height:calc(100vh - 70px);padding:4px 0;gap:6px}h1{font-size:18px}.toolbar{top:4px;gap:6px;padding:6px 8px;border-radius:12px}.tool-btn{width:32px;height:32px;font-size:15px}.swatch{width:22px;height:22px}.color-picker{width:32px;height:32px}input[type="range"]{width:70px}.sep{height:20px}}.transfer-group{position:relative}.transfer-menu{position:absolute;top:calc(100% + 8px);right:0;display:flex;flex-direction:column;gap:4px;padding:6px;background:#1a1a2e;border:2px solid #00ff41;border-radius:10px;box-shadow:0 0 20px rgba(0, 255, 0, 0.4);z-index:20;min-width:130px}.transfer-menu[hidden]{display:none}.transfer-item{padding:8px 12px;background:#000;border:2px solid #00ff41;color:#00ff41;font-family:'Courier New', monospace;font-size:13px;font-weight:bold;border-radius:6px;cursor:pointer;text-align:left;transition:all 0.15s}.transfer-item:hover{background:#00ff41;color:#000;box-shadow:0 0 12px rgba(0, 255, 0, 0.7)}.transfer-item:active{transform:scale(0.97)}#importFileInput{display:none}@media (max-width:780px){.transfer-menu{min-width:120px;padding:4px}.transfer-item{padding:6px 10px;font-size:12px}}.brush-preview{position:absolute;pointer-events:none;border-radius:50%;transform:translate(-50%, -50%);z-index:5;box-sizing:border-box;will-change:left, top, width, height;transition:width 0.05s, height 0.05s, border-color 0.1s}.brush-preview.pen{border:1px solid currentColor;box-shadow:0 0 6px currentColor;background:transparent}.brush-preview.eraser{border:1px dashed #fff;background:rgba(255, 255, 255, 0.08);box-shadow:0 0 6px rgba(255, 255, 255, 0.4)}@media (hover:none) and (pointer:coarse){.brush-preview{display:none !important}}</style>
 {% endraw %}
 {% endblock %}
 
@@ -56,6 +56,7 @@
         <!-- ОБЁРНУТО В КОНТЕЙНЕР: canvas растягивается по нему -->
         <div class="canvas-host">
             <canvas id="board"></canvas>
+            <div id="brushPreview" class="brush-preview" hidden></div>
         </div>
     <input type="file" id="importFileInput" accept="application/json,.json">
     </div>
@@ -532,13 +533,21 @@ const Input = {
     init(notebook, canvas) {
         this.notebook = notebook;
         this.canvas = canvas;
+        this.preview = document.getElementById('brushPreview');
 
         canvas.addEventListener('mousedown', this.onDown.bind(this));
         canvas.addEventListener('mousemove', this.onMove.bind(this));
         window.addEventListener('mouseup', this.onUp.bind(this));
-        canvas.addEventListener('mouseleave', this.onUp.bind(this));
+
+        canvas.addEventListener('mouseleave', () => {
+            this.onUp();
+            if (this.preview) this.preview.hidden = true;
+        });
 
         canvas.addEventListener('touchstart', this.onDown.bind(this), { passive: false });
+        canvas.addEventListener('touchstart', () => {
+            if (this.preview) this.preview.hidden = true;
+        }, { passive: true });
         canvas.addEventListener('touchmove', this.onMove.bind(this), { passive: false });
         canvas.addEventListener('touchend', this.onUp.bind(this));
         canvas.addEventListener('touchcancel', this.onUp.bind(this));
@@ -557,6 +566,9 @@ const Input = {
         e.preventDefault();
         const { x, y } = this.pos(e);
 
+        // Двигаем/показываем кружок и в момент клика
+        this._updatePreviewPosition(e);
+
         this.drawing = true;
         this.activeStroke = Strokes.start(
             Toolbar.color,
@@ -568,6 +580,9 @@ const Input = {
     },
 
     onMove(e) {
+        // Двигаем кружок-индикатор под курсором (для мыши и пера, не для тача)
+        this._updatePreviewPosition(e);
+
         if (!this.drawing) return;
         e.preventDefault();
         const { x, y } = this.pos(e);
@@ -575,6 +590,24 @@ const Input = {
         if (added) {
             Renderer.drawLastSegment(this.activeStroke);
         }
+    },
+
+    _updatePreviewPosition(e) {
+        if (!this.preview) return;
+
+        // На тачах кружок не показываем
+        if (e.touches || e.pointerType === 'touch') {
+            this.preview.hidden = true;
+            return;
+        }
+
+        const rect = this.canvas.getBoundingClientRect();
+        const cx = e.clientX - rect.left;
+        const cy = e.clientY - rect.top;
+
+        this.preview.style.left = cx + 'px';
+        this.preview.style.top  = cy + 'px';
+        this.preview.hidden = false;
     },
 
     onUp() {
@@ -587,7 +620,6 @@ const Input = {
     onKey(e) {
         if (e.target.tagName === 'INPUT') return;
         const k = e.key.toLowerCase();
-        const t = this.notebook.toolbar;
 
         if (k === 'e' || k === 'у') Toolbar.setTool('pen');
         if (k === 'l' || k === 'д') Toolbar.setTool('eraser');
@@ -677,6 +709,7 @@ const Toolbar = {
         this.sizeInput.oninput = (e) => {
             this.size = Number(e.target.value);
             this.sizeLabel.textContent = this.size;
+            this.updateBrushPreview();
         };
 
         // Палитра
@@ -687,6 +720,7 @@ const Toolbar = {
         this.initTransferMenu(notebook);
         this.updateUndoRedo();
         this.updatePageControls();
+        this.updateBrushPreview();
     },
 
     buildPalette() {
@@ -724,6 +758,7 @@ const Toolbar = {
         const s = this.sizes[t];
         this.sizeInput.value = s;
         this.sizeLabel.textContent = s;
+        this.updateBrushPreview();
     },
 
     updateUndoRedo() {
@@ -798,6 +833,22 @@ const Toolbar = {
         });
     },
 
+    updateBrushPreview() {
+        const p = document.getElementById('brushPreview');
+        if (!p) return;
+
+        const size = this.size;
+        p.style.width  = size + 'px';
+        p.style.height = size + 'px';
+
+        if (this.tool === 'eraser') {
+            p.className = 'brush-preview eraser';
+        } else {
+            p.className = 'brush-preview pen';
+            p.style.color = this.color;
+        }
+    }
+
 };
 const Notebook = {
     canvas: null,
@@ -831,12 +882,18 @@ const Notebook = {
             this._ro = new ResizeObserver(() => {
                 Renderer.resize();
                 Renderer.redrawAll(Strokes.list);
+
+                const p = document.getElementById('brushPreview');
+                if (p) p.hidden = true;
             });
             this._ro.observe(parent);
         } else {
             window.addEventListener('resize', () => {
                 Renderer.resize();
                 Renderer.redrawAll(Strokes.list);
+
+                const p = document.getElementById('brushPreview');
+                if (p) p.hidden = true;
             });
         }
     },

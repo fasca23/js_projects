@@ -30,12 +30,18 @@ const Notebook = {
             this._ro = new ResizeObserver(() => {
                 Renderer.resize();
                 Renderer.redrawAll(Strokes.list);
+
+                const p = document.getElementById('brushPreview');
+                if (p) p.hidden = true;
             });
             this._ro.observe(parent);
         } else {
             window.addEventListener('resize', () => {
                 Renderer.resize();
                 Renderer.redrawAll(Strokes.list);
+
+                const p = document.getElementById('brushPreview');
+                if (p) p.hidden = true;
             });
         }
     },

@@ -73,6 +73,7 @@ const Toolbar = {
         this.sizeInput.oninput = (e) => {
             this.size = Number(e.target.value);
             this.sizeLabel.textContent = this.size;
+            this.updateBrushPreview();
         };
 
         // Палитра
@@ -83,6 +84,7 @@ const Toolbar = {
         this.initTransferMenu(notebook);
         this.updateUndoRedo();
         this.updatePageControls();
+        this.updateBrushPreview();
     },
 
     buildPalette() {
@@ -120,6 +122,7 @@ const Toolbar = {
         const s = this.sizes[t];
         this.sizeInput.value = s;
         this.sizeLabel.textContent = s;
+        this.updateBrushPreview();
     },
 
     updateUndoRedo() {
@@ -193,5 +196,21 @@ const Toolbar = {
             }
         });
     },
+
+    updateBrushPreview() {
+        const p = document.getElementById('brushPreview');
+        if (!p) return;
+
+        const size = this.size;
+        p.style.width  = size + 'px';
+        p.style.height = size + 'px';
+
+        if (this.tool === 'eraser') {
+            p.className = 'brush-preview eraser';
+        } else {
+            p.className = 'brush-preview pen';
+            p.style.color = this.color;
+        }
+    }
 
 };

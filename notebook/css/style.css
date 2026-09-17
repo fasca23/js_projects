@@ -320,3 +320,39 @@ input[type="range"] {
         font-size: 12px;
     }
 }
+
+/* ============================================
+   Курсор-индикатор размера кисти
+   ============================================ */
+
+.brush-preview {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    box-sizing: border-box;
+    will-change: left, top, width, height;
+    transition: width 0.05s, height 0.05s, border-color 0.1s;
+}
+
+/* Ручка: тонкая обводка цвета кисти + лёгкое свечение */
+.brush-preview.pen {
+    border: 1px solid currentColor;
+    box-shadow: 0 0 6px currentColor;
+    background: transparent;
+}
+
+/* Ластик: пунктирная белая обводка + полупрозрачная заливка */
+.brush-preview.eraser {
+    border: 1px dashed #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+}
+
+/* На тач-устройствах preview не нужен */
+@media (hover: none) and (pointer: coarse) {
+    .brush-preview {
+        display: none !important;
+    }
+}

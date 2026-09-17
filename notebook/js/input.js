@@ -6,13 +6,21 @@ const Input = {
     init(notebook, canvas) {
         this.notebook = notebook;
         this.canvas = canvas;
+        this.preview = document.getElementById('brushPreview');
 
         canvas.addEventListener('mousedown', this.onDown.bind(this));
         canvas.addEventListener('mousemove', this.onMove.bind(this));
         window.addEventListener('mouseup', this.onUp.bind(this));
-        canvas.addEventListener('mouseleave', this.onUp.bind(this));
+
+        canvas.addEventListener('mouseleave', () => {
+            this.onUp();
+            if (this.preview) this.preview.hidden = true;
+        });
 
         canvas.addEventListener('touchstart', this.onDown.bind(this), { passive: false });
+        canvas.addEventListener('touchstart', () => {
+            if (this.preview) this.preview.hidden = true;
+        }, { passive: true });
         canvas.addEventListener('touchmove', this.onMove.bind(this), { passive: false });
         canvas.addEventListener('touchend', this.onUp.bind(this));
         canvas.addEventListener('touchcancel', this.onUp.bind(this));
@@ -31,6 +39,9 @@ const Input = {
         e.preventDefault();
         const { x, y } = this.pos(e);
 
+        // Двигаем/показываем кружок и в момент клика
+        this._updatePreviewPosition(e);
+
         this.drawing = true;
         this.activeStroke = Strokes.start(
             Toolbar.color,
@@ -42,6 +53,9 @@ const Input = {
     },
 
     onMove(e) {
+        // Двигаем кружок-индикатор под курсором (для мыши и пера, не для тача)
+        this._updatePreviewPosition(e);
+
         if (!this.drawing) return;
         e.preventDefault();
         const { x, y } = this.pos(e);
@@ -49,6 +63,24 @@ const Input = {
         if (added) {
             Renderer.drawLastSegment(this.activeStroke);
         }
+    },
+
+    _updatePreviewPosition(e) {
+        if (!this.preview) return;
+
+        // На тачах кружок не показываем
+        if (e.touches || e.pointerType === 'touch') {
+            this.preview.hidden = true;
+            return;
+        }
+
+        const rect = this.canvas.getBoundingClientRect();
+        const cx = e.clientX - rect.left;
+        const cy = e.clientY - rect.top;
+
+        this.preview.style.left = cx + 'px';
+        this.preview.style.top  = cy + 'px';
+        this.preview.hidden = false;
     },
 
     onUp() {
@@ -61,7 +93,6 @@ const Input = {
     onKey(e) {
         if (e.target.tagName === 'INPUT') return;
         const k = e.key.toLowerCase();
-        const t = this.notebook.toolbar;
 
         if (k === 'e' || k === 'у') Toolbar.setTool('pen');
         if (k === 'l' || k === 'д') Toolbar.setTool('eraser');
