@@ -170,6 +170,7 @@ h1 {
     min-width: 22px;
     text-align: center;
     font-weight: bold;
+    color: #00ff41;
 }
 
 input[type="range"] {

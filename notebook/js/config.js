@@ -17,5 +17,9 @@ const CONFIG = {
         ERASER: '#000000',
         GRID: '#0a2a0a',
         GRID_STEP: 24
-    }
+    },
+    
+    MAX_PAGES: 5,
+    STORAGE_PAGE_PREFIX: 'notebook_page_',
+    STORAGE_INDEX_KEY: 'notebook_pages_index',
 };

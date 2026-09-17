@@ -29,6 +29,9 @@ const Toolbar = {
         this.redoBtn = document.getElementById('btnRedo');
         this.clearBtn = document.getElementById('btnClear');
         this.gridBtn = document.getElementById('btnGrid');
+        this.prevPageBtn = document.getElementById('btnPrevPage');
+        this.nextPageBtn = document.getElementById('btnNextPage');
+        this.pageLabel   = document.getElementById('pageLabel');
         this.colorInput = document.getElementById('colorPicker');
         this.sizeInput = document.getElementById('sizeSlider');
         this.sizeLabel = document.getElementById('sizeLabel');
@@ -45,6 +48,9 @@ const Toolbar = {
             if (confirm('Очистить весь блокнот?')) notebook.clearAll();
         };
         this.gridBtn.onclick = () => notebook.toggleGrid();
+
+        this.prevPageBtn.onclick = () => notebook.prevPage();
+        this.nextPageBtn.onclick = () => notebook.nextPage();
 
         // Цвет
         this.colorInput.value = this.color;
@@ -68,6 +74,7 @@ const Toolbar = {
         // Стартуем с ручки и подтягиваем её сохранённый размер
         this.setTool('pen');
         this.updateUndoRedo();
+        this.updatePageControls();
     },
 
     buildPalette() {
@@ -110,5 +117,14 @@ const Toolbar = {
     updateUndoRedo() {
         this.undoBtn.disabled = Strokes.history.length === 0;
         this.redoBtn.disabled = Strokes.redoStack.length === 0;
+    },
+    
+    updatePageControls() {
+        const p = Notebook.currentPageNumber;
+        const total = CONFIG.MAX_PAGES;
+        this.pageLabel.textContent = p + ' / ' + total;
+        this.prevPageBtn.disabled = (p <= 1);
+        this.nextPageBtn.disabled = (p >= total);
     }
+
 };

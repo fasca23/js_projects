@@ -6,6 +6,11 @@
   python build.py single   - сборка в 1 файл (notebook_bundle.html)
   python build.py template - сборка в Jinja2 шаблон
   python build.py all      - все варианты
+  python build.py help     - справка
+
+Единственный источник разметки — index.html.
+Правите тулбар/страницу — правите только index.html, дальше всё
+собирается автоматически во всех трёх режимах.
 """
 
 import re
@@ -27,6 +32,10 @@ JS_FILES = [
 BUNDLE_JS_NAME = 'notebook.js'
 
 
+# ============================================
+#  Утилиты
+# ============================================
+
 def read_file(path):
     with open(path, 'r', encoding='utf-8') as f:
         return f.read()
@@ -39,6 +48,10 @@ def write_file(path, content):
     with open(path, 'w', encoding='utf-8') as f:
         f.write(content)
 
+
+# ============================================
+#  Минификация
+# ============================================
 
 def minify_css(css):
     css = re.sub(r'/\*.*?\*/', '', css, flags=re.DOTALL)
@@ -80,6 +93,10 @@ def minify_html(html):
     return html.strip()
 
 
+# ============================================
+#  Сборка JS
+# ============================================
+
 def get_combined_js():
     combined = ''
     for file in JS_FILES:
@@ -90,6 +107,31 @@ def get_combined_js():
             print(f"  ❌ {file} не найден!")
     return combined
 
+
+# ============================================
+#  Извлечение разметки из index.html
+# ============================================
+
+def extract_body(html):
+    """Возвращает содержимое <body>...</body> без подключений js/*.js."""
+    m = re.search(r'<body[^>]*>(.*)</body>', html, re.DOTALL)
+    body = m.group(1) if m else html
+    # убираем <script src="js/...">...</script>
+    body = re.sub(r'<script\s+src="js/[^"]*"\s*>\s*</script>\s*', '', body)
+    return body.strip()
+
+
+def extract_head_links(html):
+    """
+    Возвращает True, если в <head> подключён css/style.css.
+    Нужно, чтобы понимать, какие замены делать.
+    """
+    return 'css/style.css' in html
+
+
+# ============================================
+#  Режим 1: dist/ — три файла
+# ============================================
 
 def build_three_files():
     print("📦 Сборка в 3 файла...")
@@ -102,49 +144,23 @@ def build_three_files():
     minified_css = minify_css(css)
     minified_js = minify_js(combined_js)
 
-    html = """<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>📝 Блокнот</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="notebook-wrapper">
-        <h1>📝 Блокнот</h1>
+    # Единственный источник разметки — index.html
+    html = read_file('index.html')
 
-        <div class="toolbar" id="toolbar">
-            <div class="tool-group">
-                <button id="btnPen" class="tool-btn active" title="Ручка (E)">✏️</button>
-                <button id="btnEraser" class="tool-btn" title="Ластик (L)">🧽</button>
-            </div>
-            <div class="sep"></div>
-            <div class="tool-group">
-                <button id="btnUndo" class="tool-btn" title="Отменить (Ctrl+Z)">↶</button>
-                <button id="btnRedo" class="tool-btn" title="Повторить (Ctrl+Y)">↷</button>
-            </div>
-            <div class="sep"></div>
-            <div class="tool-group palette" id="palette"></div>
-            <input type="color" id="colorPicker" class="color-picker" title="Свой цвет">
-            <div class="sep"></div>
-            <div class="tool-group size-group">
-                <span class="size-icon">●</span>
-                <input type="range" id="sizeSlider" min="1" max="40" value="3">
-                <span id="sizeLabel" class="size-label">3</span>
-            </div>
-            <div class="sep"></div>
-            <div class="tool-group">
-                <button id="btnGrid" class="tool-btn" title="Сетка (G)">▦</button>
-                <button id="btnClear" class="tool-btn danger" title="Очистить">🗑️</button>
-            </div>
-        </div>
+    # В dist/ — style.css лежит рядом, путь без css/
+    html = html.replace(
+        '<link rel="stylesheet" href="css/style.css">',
+        '<link rel="stylesheet" href="style.css">'
+    )
 
-        <canvas id="board"></canvas>
-    </div>
-    <script src="notebook.js"></script>
-</body>
-</html>"""
+    # Убираем модульные <script src="js/...">
+    html = re.sub(r'<script\s+src="js/[^"]*"\s*>\s*</script>\s*', '', html)
+
+    # Подключаем собранный notebook.js перед </body>
+    html = html.replace(
+        '</body>',
+        f'    <script src="{BUNDLE_JS_NAME}"></script>\n</body>'
+    )
 
     write_file('dist/style.css', minified_css)
     write_file(f'dist/{BUNDLE_JS_NAME}', minified_js)
@@ -152,6 +168,10 @@ def build_three_files():
 
     print(f"\n✅ Собрано в dist/")
 
+
+# ============================================
+#  Режим 2: одиночный HTML-файл
+# ============================================
 
 def build_single_file():
     print("📦 Сборка в 1 файл...")
@@ -164,12 +184,20 @@ def build_single_file():
     minified_css = minify_css(css)
     minified_js = minify_js(combined_js)
 
+    # CSS — внутрь <style>
     html = html.replace(
         '<link rel="stylesheet" href="css/style.css">',
         f'<style>{minified_css}</style>'
     )
-    html = re.sub(r'<script src="js/.*?"></script>\s*', '', html)
-    html = html.replace('</body>', f'<script>{minified_js}</script>\n</body>')
+
+    # Убираем модульные <script src="js/...">
+    html = re.sub(r'<script\s+src="js/[^"]*"\s*>\s*</script>\s*', '', html)
+
+    # JS — внутрь <script> перед </body>
+    html = html.replace(
+        '</body>',
+        f'    <script>{minified_js}</script>\n</body>'
+    )
 
     minified_html = minify_html(html)
     write_file('notebook_bundle.html', '<!DOCTYPE html>' + minified_html)
@@ -178,69 +206,58 @@ def build_single_file():
           f"{os.path.getsize('notebook_bundle.html')} байт")
 
 
+# ============================================
+#  Режим 3: Jinja2 шаблон
+# ============================================
+
 def build_template():
     print("📦 Сборка в Jinja2 шаблон...")
 
     combined_js = get_combined_js()
     css = read_file('css/style.css')
+    html = read_file('index.html')
 
     print("🎨 Минификация...")
     minified_css = minify_css(css)
     combined_js = combined_js.strip()
 
+    # Разметку тела берём прямо из index.html
+    body = extract_body(html)
+
+    # CSS и JS оборачиваем в {% raw %} — чтобы Jinja не парсила
+    # возможные {{ }} и {% %} внутри бандла.
     template = """{% extends "base.html" %}
 
 {% block title %}📝 Блокнот{% endblock %}
 
 {% block extra_head %}
+{% raw %}
 <style>CUSTOM_CSS</style>
+{% endraw %}
 {% endblock %}
 
 {% block content %}
-<div class="notebook-wrapper">
-    <h1>📝 Блокнот</h1>
-
-    <div class="toolbar" id="toolbar">
-        <div class="tool-group">
-            <button id="btnPen" class="tool-btn active" title="Ручка (E)">✏️</button>
-            <button id="btnEraser" class="tool-btn" title="Ластик (L)">🧽</button>
-        </div>
-        <div class="sep"></div>
-        <div class="tool-group">
-            <button id="btnUndo" class="tool-btn" title="Отменить (Ctrl+Z)">↶</button>
-            <button id="btnRedo" class="tool-btn" title="Повторить (Ctrl+Y)">↷</button>
-        </div>
-        <div class="sep"></div>
-        <div class="tool-group palette" id="palette"></div>
-        <input type="color" id="colorPicker" class="color-picker" title="Свой цвет">
-        <div class="sep"></div>
-        <div class="tool-group size-group">
-            <span class="size-icon">●</span>
-            <input type="range" id="sizeSlider" min="1" max="40" value="3">
-            <span id="sizeLabel" class="size-label">3</span>
-        </div>
-        <div class="sep"></div>
-        <div class="tool-group">
-            <button id="btnGrid" class="tool-btn" title="Сетка (G)">▦</button>
-            <button id="btnClear" class="tool-btn danger" title="Очистить">🗑️</button>
-        </div>
-    </div>
-
-    <div class="canvas-host">
-        <canvas id="board"></canvas>
-    </div>
-</div>
+BODY_CONTENT
 {% endblock %}
 
 {% block extra_scripts %}
+{% raw %}
 <script>CUSTOM_JS</script>
+{% endraw %}
 {% endblock %}"""
 
     template = template.replace('CUSTOM_CSS', minified_css)
+    template = template.replace('BODY_CONTENT', body)
     template = template.replace('CUSTOM_JS', combined_js)
 
     write_file('notebook_template_bundle.html', template)
+
     print(f"\n✅ Собрано в notebook_template_bundle.html")
+
+
+# ============================================
+#  Справка
+# ============================================
 
 def show_help():
     print("""
@@ -252,8 +269,14 @@ def show_help():
   python build.py template - сборка в Jinja2 шаблон
   python build.py all      - все варианты
   python build.py help     - справка
+
+Разметка читается из index.html — правьте тулбар только там.
 """)
 
+
+# ============================================
+#  Точка входа
+# ============================================
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:

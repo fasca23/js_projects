@@ -3,46 +3,56 @@
 {% block title %}📝 Блокнот{% endblock %}
 
 {% block extra_head %}
-<style>*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}.notebook-wrapper{position:relative;width:100%;height:calc(100vh - 80px);min-height:480px;display:flex;flex-direction:column;gap:8px;padding:8px 0}h1{text-align:center;color:#daa520;font-size:22px;text-shadow:0 0 15px rgba(218, 165, 32, 0.6);flex:0 0 auto;position:static}.toolbar{position:sticky;top:8px;align-self:center;display:flex;align-items:center;gap:10px;padding:8px 14px;background:#1a1a2e;border:2px solid #00ff41;border-radius:14px;box-shadow:0 0 25px rgba(0, 255, 0, 0.3);z-index:10;max-width:100%;flex-wrap:wrap;justify-content:center;margin:0 auto;flex:0 0 auto}.tool-group{display:flex;align-items:center;gap:6px}.sep{width:1px;height:24px;background:#00ff41;opacity:0.4}.tool-btn{width:36px;height:36px;background:#000;border:2px solid #00ff41;color:#00ff41;font-size:18px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;box-shadow:0 0 8px rgba(0, 255, 0, 0.25);padding:0;line-height:1}.tool-btn:hover:not(:disabled){transform:scale(1.08);box-shadow:0 0 18px rgba(0, 255, 0, 0.6)}.tool-btn:active:not(:disabled){transform:scale(0.92)}.tool-btn.active{background:#00ff41;color:#000;box-shadow:0 0 22px rgba(0, 255, 0, 0.9)}.tool-btn:disabled{opacity:0.3;cursor:not-allowed;box-shadow:none}.tool-btn.danger{border-color:#ff0040;color:#ff0040;box-shadow:0 0 8px rgba(255, 0, 64, 0.3)}.tool-btn.danger:hover{background:#ff0040;color:#000;box-shadow:0 0 22px rgba(255, 0, 64, 0.8)}.palette{gap:4px}.swatch{width:26px;height:26px;border:2px solid #333;border-radius:6px;cursor:pointer;transition:transform 0.15s, border-color 0.15s;padding:0}.swatch:hover{transform:scale(1.15)}.swatch.active{border-color:#fff;box-shadow:0 0 12px rgba(255, 255, 255, 0.8)}.color-picker{width:36px;height:36px;border:2px solid #00ff41;border-radius:8px;background:#000;cursor:pointer;padding:2px;box-shadow:0 0 8px rgba(0, 255, 0, 0.25)}.size-group{gap:8px;color:#00ff41;font-size:12px}.size-icon{font-size:16px}.size-label{min-width:22px;text-align:center;font-weight:bold}input[type="range"]{width:90px;accent-color:#00ff41;cursor:pointer}.canvas-host{position:relative;flex:1 1 auto;min-height:200px;border:2px solid #00ff41;border-radius:12px;overflow:hidden;box-shadow:0 0 25px rgba(0, 255, 0, 0.2)}#board{display:block;position:absolute;top:0;left:0;width:100%;height:100%;background:#000;cursor:crosshair;touch-action:none}@media (max-width:780px){.notebook-wrapper{height:calc(100vh - 70px);padding:4px 0;gap:6px}h1{font-size:18px}.toolbar{top:4px;gap:6px;padding:6px 8px;border-radius:12px}.tool-btn{width:32px;height:32px;font-size:15px}.swatch{width:22px;height:22px}.color-picker{width:32px;height:32px}input[type="range"]{width:70px}.sep{height:20px}}</style>
+{% raw %}
+<style>*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}.notebook-wrapper{position:relative;width:100%;height:calc(100vh - 80px);min-height:480px;display:flex;flex-direction:column;gap:8px;padding:8px 0}h1{text-align:center;color:#daa520;font-size:22px;text-shadow:0 0 15px rgba(218, 165, 32, 0.6);flex:0 0 auto;position:static}.toolbar{position:sticky;top:8px;align-self:center;display:flex;align-items:center;gap:10px;padding:8px 14px;background:#1a1a2e;border:2px solid #00ff41;border-radius:14px;box-shadow:0 0 25px rgba(0, 255, 0, 0.3);z-index:10;max-width:100%;flex-wrap:wrap;justify-content:center;margin:0 auto;flex:0 0 auto}.tool-group{display:flex;align-items:center;gap:6px}.sep{width:1px;height:24px;background:#00ff41;opacity:0.4}.tool-btn{width:36px;height:36px;background:#000;border:2px solid #00ff41;color:#00ff41;font-size:18px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;box-shadow:0 0 8px rgba(0, 255, 0, 0.25);padding:0;line-height:1}.tool-btn:hover:not(:disabled){transform:scale(1.08);box-shadow:0 0 18px rgba(0, 255, 0, 0.6)}.tool-btn:active:not(:disabled){transform:scale(0.92)}.tool-btn.active{background:#00ff41;color:#000;box-shadow:0 0 22px rgba(0, 255, 0, 0.9)}.tool-btn:disabled{opacity:0.3;cursor:not-allowed;box-shadow:none}.tool-btn.danger{border-color:#ff0040;color:#ff0040;box-shadow:0 0 8px rgba(255, 0, 64, 0.3)}.tool-btn.danger:hover{background:#ff0040;color:#000;box-shadow:0 0 22px rgba(255, 0, 64, 0.8)}.palette{gap:4px}.swatch{width:26px;height:26px;border:2px solid #333;border-radius:6px;cursor:pointer;transition:transform 0.15s, border-color 0.15s;padding:0}.swatch:hover{transform:scale(1.15)}.swatch.active{border-color:#fff;box-shadow:0 0 12px rgba(255, 255, 255, 0.8)}.color-picker{width:36px;height:36px;border:2px solid #00ff41;border-radius:8px;background:#000;cursor:pointer;padding:2px;box-shadow:0 0 8px rgba(0, 255, 0, 0.25)}.size-group{gap:8px;color:#00ff41;font-size:12px}.size-icon{font-size:16px}.size-label{min-width:22px;text-align:center;font-weight:bold;color:#00ff41}input[type="range"]{width:90px;accent-color:#00ff41;cursor:pointer}.canvas-host{position:relative;flex:1 1 auto;min-height:200px;border:2px solid #00ff41;border-radius:12px;overflow:hidden;box-shadow:0 0 25px rgba(0, 255, 0, 0.2)}#board{display:block;position:absolute;top:0;left:0;width:100%;height:100%;background:#000;cursor:crosshair;touch-action:none}@media (max-width:780px){.notebook-wrapper{height:calc(100vh - 70px);padding:4px 0;gap:6px}h1{font-size:18px}.toolbar{top:4px;gap:6px;padding:6px 8px;border-radius:12px}.tool-btn{width:32px;height:32px;font-size:15px}.swatch{width:22px;height:22px}.color-picker{width:32px;height:32px}input[type="range"]{width:70px}.sep{height:20px}}</style>
+{% endraw %}
 {% endblock %}
 
 {% block content %}
 <div class="notebook-wrapper">
-    <h1>📝 Блокнот</h1>
+        <h1>📝 Блокнот</h1>
 
-    <div class="toolbar" id="toolbar">
-        <div class="tool-group">
-            <button id="btnPen" class="tool-btn active" title="Ручка (E)">✏️</button>
-            <button id="btnEraser" class="tool-btn" title="Ластик (L)">🧽</button>
+        <div class="toolbar" id="toolbar">
+            <div class="tool-group">
+                <button id="btnPen" class="tool-btn active" title="Ручка (E)">✏️</button>
+                <button id="btnEraser" class="tool-btn" title="Ластик (L)">🧽</button>
+            </div>
+            <div class="sep"></div>
+            <div class="tool-group">
+                <button id="btnUndo" class="tool-btn" title="Отменить (Ctrl+Z)">↶</button>
+                <button id="btnRedo" class="tool-btn" title="Повторить (Ctrl+Y)">↷</button>
+            </div>
+            <div class="sep"></div>
+            <div class="tool-group palette" id="palette"></div>
+            <input type="color" id="colorPicker" class="color-picker" title="Свой цвет">
+            <div class="sep"></div>
+            <div class="tool-group size-group">
+                <span class="size-icon">●</span>
+                <input type="range" id="sizeSlider" min="1" max="40" value="3">
+                <span id="sizeLabel" class="size-label">3</span>
+            </div>
+            <div class="sep"></div>
+            <div class="tool-group">
+                <button id="btnPrevPage" class="tool-btn" title="Предыдущая страница">◀</button>
+                <span id="pageLabel" class="size-label">1 / 5</span>
+                <button id="btnNextPage" class="tool-btn" title="Следующая страница">▶</button>
+            </div>
+            <div class="sep"></div>
+            <div class="tool-group">
+                <button id="btnGrid" class="tool-btn" title="Сетка (G)">▦</button>
+                <button id="btnClear" class="tool-btn danger" title="Очистить">🗑️</button>
+            </div>
         </div>
-        <div class="sep"></div>
-        <div class="tool-group">
-            <button id="btnUndo" class="tool-btn" title="Отменить (Ctrl+Z)">↶</button>
-            <button id="btnRedo" class="tool-btn" title="Повторить (Ctrl+Y)">↷</button>
-        </div>
-        <div class="sep"></div>
-        <div class="tool-group palette" id="palette"></div>
-        <input type="color" id="colorPicker" class="color-picker" title="Свой цвет">
-        <div class="sep"></div>
-        <div class="tool-group size-group">
-            <span class="size-icon">●</span>
-            <input type="range" id="sizeSlider" min="1" max="40" value="3">
-            <span id="sizeLabel" class="size-label">3</span>
-        </div>
-        <div class="sep"></div>
-        <div class="tool-group">
-            <button id="btnGrid" class="tool-btn" title="Сетка (G)">▦</button>
-            <button id="btnClear" class="tool-btn danger" title="Очистить">🗑️</button>
+
+        <!-- ОБЁРНУТО В КОНТЕЙНЕР: canvas растягивается по нему -->
+        <div class="canvas-host">
+            <canvas id="board"></canvas>
         </div>
     </div>
-
-    <div class="canvas-host">
-        <canvas id="board"></canvas>
-    </div>
-</div>
 {% endblock %}
 
 {% block extra_scripts %}
+{% raw %}
 <script>const CONFIG = {
     STORAGE_KEY: 'notebook_strokes_v1',
     HISTORY_LIMIT: 50,
@@ -62,36 +72,84 @@
         ERASER: '#000000',
         GRID: '#0a2a0a',
         GRID_STEP: 24
-    }
+    },
+    
+    MAX_PAGES: 5,
+    STORAGE_PAGE_PREFIX: 'notebook_page_',
+    STORAGE_INDEX_KEY: 'notebook_pages_index',
 };
 const Storage = {
-    save(strokes) {
+    // ============================================
+    //  Индекс страниц: список id и номер активной
+    // ============================================
+
+    loadIndex() {
         try {
-            localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(strokes));
+            const raw = localStorage.getItem(CONFIG.STORAGE_INDEX_KEY);
+            if (!raw) return null;
+            const data = JSON.parse(raw);
+            if (!data || !Array.isArray(data.pages)) return null;
+            return data;
+        } catch (e) {
+            console.warn('Storage.loadIndex error:', e);
+            return null;
+        }
+    },
+
+    saveIndex(index) {
+        try {
+            localStorage.setItem(CONFIG.STORAGE_INDEX_KEY, JSON.stringify(index));
             return true;
         } catch (e) {
-            console.warn('Storage.save error:', e);
+            console.warn('Storage.saveIndex error:', e);
             return false;
         }
     },
 
-    load() {
+    // ============================================
+    //  Одна страница: массив штрихов
+    // ============================================
+
+    loadPage(pageId) {
         try {
-            const raw = localStorage.getItem(CONFIG.STORAGE_KEY);
+            const raw = localStorage.getItem(CONFIG.STORAGE_PAGE_PREFIX + pageId);
             if (!raw) return [];
             const data = JSON.parse(raw);
             return Array.isArray(data) ? data : [];
         } catch (e) {
-            console.warn('Storage.load error:', e);
+            console.warn('Storage.loadPage error:', e);
             return [];
         }
     },
 
-    clear() {
+    savePage(pageId, strokesSerialized) {
         try {
-            localStorage.removeItem(CONFIG.STORAGE_KEY);
+            localStorage.setItem(
+                CONFIG.STORAGE_PAGE_PREFIX + pageId,
+                JSON.stringify(strokesSerialized)
+            );
+            return true;
         } catch (e) {
-            console.warn('Storage.clear error:', e);
+            console.warn('Storage.savePage error:', e);
+            return false;
+        }
+    },
+
+    // ============================================
+    //  Утилиты
+    // ============================================
+
+    clearAllPages() {
+        try {
+            const idx = this.loadIndex();
+            if (idx && Array.isArray(idx.pages)) {
+                idx.pages.forEach(id => {
+                    localStorage.removeItem(CONFIG.STORAGE_PAGE_PREFIX + id);
+                });
+            }
+            localStorage.removeItem(CONFIG.STORAGE_INDEX_KEY);
+        } catch (e) {
+            console.warn('Storage.clearAllPages error:', e);
         }
     }
 };
@@ -440,6 +498,9 @@ const Toolbar = {
         this.redoBtn = document.getElementById('btnRedo');
         this.clearBtn = document.getElementById('btnClear');
         this.gridBtn = document.getElementById('btnGrid');
+        this.prevPageBtn = document.getElementById('btnPrevPage');
+        this.nextPageBtn = document.getElementById('btnNextPage');
+        this.pageLabel   = document.getElementById('pageLabel');
         this.colorInput = document.getElementById('colorPicker');
         this.sizeInput = document.getElementById('sizeSlider');
         this.sizeLabel = document.getElementById('sizeLabel');
@@ -456,6 +517,9 @@ const Toolbar = {
             if (confirm('Очистить весь блокнот?')) notebook.clearAll();
         };
         this.gridBtn.onclick = () => notebook.toggleGrid();
+
+        this.prevPageBtn.onclick = () => notebook.prevPage();
+        this.nextPageBtn.onclick = () => notebook.nextPage();
 
         // Цвет
         this.colorInput.value = this.color;
@@ -479,6 +543,7 @@ const Toolbar = {
         // Стартуем с ручки и подтягиваем её сохранённый размер
         this.setTool('pen');
         this.updateUndoRedo();
+        this.updatePageControls();
     },
 
     buildPalette() {
@@ -521,25 +586,44 @@ const Toolbar = {
     updateUndoRedo() {
         this.undoBtn.disabled = Strokes.history.length === 0;
         this.redoBtn.disabled = Strokes.redoStack.length === 0;
+    },
+    
+    updatePageControls() {
+        const p = Notebook.currentPageNumber;
+        const total = CONFIG.MAX_PAGES;
+        this.pageLabel.textContent = p + ' / ' + total;
+        this.prevPageBtn.disabled = (p <= 1);
+        this.nextPageBtn.disabled = (p >= total);
     }
+
 };
 const Notebook = {
     canvas: null,
     _ro: null,
 
+    // Текущее состояние
+    pageIndex: [],           // ["p1","p2","p3"]
+    activeIdx: 0,            // индекс в pageIndex
+    currentPageNumber: 1,    // 1-based, для UI
+
     init() {
         this.canvas = document.getElementById('board');
+
         Renderer.init(this.canvas);
         Toolbar.init(this);
 
-        Strokes.deserialize(Storage.load());
+        this.loadOrCreateIndex();
+
+        // Загружаем активную страницу в Strokes
+        this.loadActivePage();
+
         Renderer.redrawAll(Strokes.list);
-        Toolbar.updateUndoRedo();
 
         Input.init(this, this.canvas);
+        Toolbar.updateUndoRedo();
+        Toolbar.updatePageControls();
 
-        // Реагируем на изменение размеров РОДИТЕЛЯ (контейнера сайта),
-        // а не только окна. Это критично для встраивания.
+        // Реагируем на изменение размеров РОДИТЕЛЯ
         const parent = this.canvas.parentElement;
         if (window.ResizeObserver) {
             this._ro = new ResizeObserver(() => {
@@ -555,10 +639,93 @@ const Notebook = {
         }
     },
 
+    // ============================================
+    //  Инициализация индекса страниц
+    // ============================================
+
+    loadOrCreateIndex() {
+        const saved = Storage.loadIndex();
+
+        if (saved && Array.isArray(saved.pages) && saved.pages.length) {
+            // Обрезаем, если MAX_PAGES уменьшили
+            const trimmed = saved.pages.slice(0, CONFIG.MAX_PAGES);
+            this.pageIndex = trimmed;
+            this.activeIdx = Math.min(saved.active || 0, trimmed.length - 1);
+        } else {
+            // Первый запуск: создаём CONFIG.MAX_PAGES пустых страниц
+            this.pageIndex = [];
+            for (let i = 0; i < CONFIG.MAX_PAGES; i++) {
+                this.pageIndex.push('p' + (i + 1));
+            }
+            this.activeIdx = 0;
+            Storage.saveIndex({ pages: this.pageIndex, active: this.activeIdx });
+        }
+
+        this.currentPageNumber = this.activeIdx + 1;
+    },
+
+    // ============================================
+    //  Загрузка / сохранение активной страницы
+    // ============================================
+
+    loadActivePage() {
+        const id = this.pageIndex[this.activeIdx];
+        const data = Storage.loadPage(id);
+        Strokes.deserialize(data);
+    },
+
+    saveActivePage() {
+        const id = this.pageIndex[this.activeIdx];
+        Storage.savePage(id, Strokes.serialize());
+    },
+
+    // ============================================
+    //  Переключение страниц
+    // ============================================
+
+    prevPage() {
+        if (this.activeIdx <= 0) return;
+        this.gotoPage(this.activeIdx - 1);
+    },
+
+    nextPage() {
+        if (this.activeIdx >= this.pageIndex.length - 1) return;
+        this.gotoPage(this.activeIdx + 1);
+    },
+
+    gotoPage(idx) {
+        if (idx === this.activeIdx) return;
+        if (idx < 0 || idx >= this.pageIndex.length) return;
+
+        // 1. Сохранить текущую
+        this.saveActivePage();
+
+        // 2. Переключиться
+        this.activeIdx = idx;
+        this.currentPageNumber = idx + 1;
+
+        // 3. Загрузить новую
+        this.loadActivePage();
+        Renderer.redrawAll(Strokes.list);
+
+        // 4. Обновить UI
+        Storage.saveIndex({ pages: this.pageIndex, active: this.activeIdx });
+        Toolbar.updateUndoRedo();
+        Toolbar.updatePageControls();
+    },
+
+    // ============================================
+    //  Общий persist (вызывается после каждого штриха)
+    // ============================================
+
     persist() {
-        Storage.save(Strokes.serialize());
+        this.saveActivePage();
         Toolbar.updateUndoRedo();
     },
+
+    // ============================================
+    //  Undo / Redo / Clear — в рамках активной страницы
+    // ============================================
 
     undo() {
         if (Strokes.undo()) {
@@ -589,4 +756,5 @@ const Notebook = {
 window.addEventListener('DOMContentLoaded', () => {
     Notebook.init();
 });</script>
+{% endraw %}
 {% endblock %}
