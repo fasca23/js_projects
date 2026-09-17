@@ -221,4 +221,35 @@ const Notebook = {
         // Небольшое уведомление
         alert('Блокнот загружен из файла.');
     },
+    exportCurrentPageToImage() {
+        // 1. Временный canvas точно того же размера, как #board
+        const src = document.getElementById('board');
+        const tmp = document.createElement('canvas');
+        tmp.width = src.width;
+        tmp.height = src.height;
+
+        const tctx = tmp.getContext('2d');
+
+        // 2. Заливаем фон
+        tctx.fillStyle = CONFIG.COLORS.CANVAS_BG;
+        tctx.fillRect(0, 0, tmp.width, tmp.height);
+
+        // 3. Копируем туда содержимое основного canvas
+        tctx.drawImage(src, 0, 0);
+
+        // 4. Получаем JPEG data-url
+        const dataUrl = tmp.toDataURL('image/jpeg', 0.92);
+
+        // 5. Формируем имя файла с номером текущей страницы
+        const pageNum = this.currentPageNumber;
+        const fname = `notebook-page-${pageNum}.jpg`;
+
+        // 6. Скачиваем
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = fname;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    },
 };

@@ -43,6 +43,7 @@
                 <div class="transfer-menu" id="transferMenu" hidden>
                     <button id="btnExport" class="transfer-item">💾 Скачать</button>
                     <button id="btnImport" class="transfer-item">📂 Загрузить</button>
+                    <button id="btnExportJpg" class="transfer-item">📷 JPG</button>
                 </div>
             </div>
             <div class="sep"></div>
@@ -640,6 +641,7 @@ const Toolbar = {
         this.exportBtn    = document.getElementById('btnExport');
         this.importBtn    = document.getElementById('btnImport');
         this.importInput  = document.getElementById('importFileInput');
+        this.exportJpgBtn = document.getElementById('btnExportJpg');
         this.colorInput = document.getElementById('colorPicker');
         this.sizeInput = document.getElementById('sizeSlider');
         this.sizeLabel = document.getElementById('sizeLabel');
@@ -757,6 +759,13 @@ const Toolbar = {
             e.stopPropagation();
             closeMenu();
             notebook.exportToFile();
+        };
+
+        // Экспорт текущей страницы в JPG
+        this.exportJpgBtn.onclick = (e) => {
+            e.stopPropagation();
+            closeMenu();
+            notebook.exportCurrentPageToImage();
         };
 
         // Импорт — открыть системный диалог выбора файла
@@ -1012,6 +1021,37 @@ const Notebook = {
 
         // Небольшое уведомление
         alert('Блокнот загружен из файла.');
+    },
+    exportCurrentPageToImage() {
+        // 1. Временный canvas точно того же размера, как #board
+        const src = document.getElementById('board');
+        const tmp = document.createElement('canvas');
+        tmp.width = src.width;
+        tmp.height = src.height;
+
+        const tctx = tmp.getContext('2d');
+
+        // 2. Заливаем фон
+        tctx.fillStyle = CONFIG.COLORS.CANVAS_BG;
+        tctx.fillRect(0, 0, tmp.width, tmp.height);
+
+        // 3. Копируем туда содержимое основного canvas
+        tctx.drawImage(src, 0, 0);
+
+        // 4. Получаем JPEG data-url
+        const dataUrl = tmp.toDataURL('image/jpeg', 0.92);
+
+        // 5. Формируем имя файла с номером текущей страницы
+        const pageNum = this.currentPageNumber;
+        const fname = `notebook-page-${pageNum}.jpg`;
+
+        // 6. Скачиваем
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = fname;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
     },
 };
 window.addEventListener('DOMContentLoaded', () => {

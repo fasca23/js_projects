@@ -37,6 +37,7 @@ const Toolbar = {
         this.exportBtn    = document.getElementById('btnExport');
         this.importBtn    = document.getElementById('btnImport');
         this.importInput  = document.getElementById('importFileInput');
+        this.exportJpgBtn = document.getElementById('btnExportJpg');
         this.colorInput = document.getElementById('colorPicker');
         this.sizeInput = document.getElementById('sizeSlider');
         this.sizeLabel = document.getElementById('sizeLabel');
@@ -154,6 +155,13 @@ const Toolbar = {
             e.stopPropagation();
             closeMenu();
             notebook.exportToFile();
+        };
+
+        // Экспорт текущей страницы в JPG
+        this.exportJpgBtn.onclick = (e) => {
+            e.stopPropagation();
+            closeMenu();
+            notebook.exportCurrentPageToImage();
         };
 
         // Импорт — открыть системный диалог выбора файла
