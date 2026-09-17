@@ -4,7 +4,7 @@
 
 {% block extra_head %}
 {% raw %}
-<style>*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}.notebook-wrapper{position:relative;width:100%;height:calc(100vh - 80px);min-height:480px;display:flex;flex-direction:column;gap:8px;padding:8px 0}h1{text-align:center;color:#daa520;font-size:22px;text-shadow:0 0 15px rgba(218, 165, 32, 0.6);flex:0 0 auto;position:static}.toolbar{position:sticky;top:8px;align-self:center;display:flex;align-items:center;gap:10px;padding:8px 14px;background:#1a1a2e;border:2px solid #00ff41;border-radius:14px;box-shadow:0 0 25px rgba(0, 255, 0, 0.3);z-index:10;max-width:100%;flex-wrap:wrap;justify-content:center;margin:0 auto;flex:0 0 auto}.tool-group{display:flex;align-items:center;gap:6px}.sep{width:1px;height:24px;background:#00ff41;opacity:0.4}.tool-btn{width:36px;height:36px;background:#000;border:2px solid #00ff41;color:#00ff41;font-size:18px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;box-shadow:0 0 8px rgba(0, 255, 0, 0.25);padding:0;line-height:1}.tool-btn:hover:not(:disabled){transform:scale(1.08);box-shadow:0 0 18px rgba(0, 255, 0, 0.6)}.tool-btn:active:not(:disabled){transform:scale(0.92)}.tool-btn.active{background:#00ff41;color:#000;box-shadow:0 0 22px rgba(0, 255, 0, 0.9)}.tool-btn:disabled{opacity:0.3;cursor:not-allowed;box-shadow:none}.tool-btn.danger{border-color:#ff0040;color:#ff0040;box-shadow:0 0 8px rgba(255, 0, 64, 0.3)}.tool-btn.danger:hover{background:#ff0040;color:#000;box-shadow:0 0 22px rgba(255, 0, 64, 0.8)}.palette{gap:4px}.swatch{width:26px;height:26px;border:2px solid #333;border-radius:6px;cursor:pointer;transition:transform 0.15s, border-color 0.15s;padding:0}.swatch:hover{transform:scale(1.15)}.swatch.active{border-color:#fff;box-shadow:0 0 12px rgba(255, 255, 255, 0.8)}.color-picker{width:36px;height:36px;border:2px solid #00ff41;border-radius:8px;background:#000;cursor:pointer;padding:2px;box-shadow:0 0 8px rgba(0, 255, 0, 0.25)}.size-group{gap:8px;color:#00ff41;font-size:12px}.size-icon{font-size:16px}.size-label{min-width:22px;text-align:center;font-weight:bold;color:#00ff41}input[type="range"]{width:90px;accent-color:#00ff41;cursor:pointer}.canvas-host{position:relative;flex:1 1 auto;min-height:200px;border:2px solid #00ff41;border-radius:12px;overflow:hidden;box-shadow:0 0 25px rgba(0, 255, 0, 0.2)}#board{display:block;position:absolute;top:0;left:0;width:100%;height:100%;background:#000;cursor:crosshair;touch-action:none}@media (max-width:780px){.notebook-wrapper{height:calc(100vh - 70px);padding:4px 0;gap:6px}h1{font-size:18px}.toolbar{top:4px;gap:6px;padding:6px 8px;border-radius:12px}.tool-btn{width:32px;height:32px;font-size:15px}.swatch{width:22px;height:22px}.color-picker{width:32px;height:32px}input[type="range"]{width:70px}.sep{height:20px}}</style>
+<style>*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}.notebook-wrapper{position:relative;width:100%;height:calc(100vh - 80px);min-height:480px;display:flex;flex-direction:column;gap:8px;padding:8px 0}h1{text-align:center;color:#daa520;font-size:22px;text-shadow:0 0 15px rgba(218, 165, 32, 0.6);flex:0 0 auto;position:static}.toolbar{position:sticky;top:8px;align-self:center;display:flex;align-items:center;gap:10px;padding:8px 14px;background:#1a1a2e;border:2px solid #00ff41;border-radius:14px;box-shadow:0 0 25px rgba(0, 255, 0, 0.3);z-index:10;max-width:100%;flex-wrap:wrap;justify-content:center;margin:0 auto;flex:0 0 auto}.tool-group{display:flex;align-items:center;gap:6px}.sep{width:1px;height:24px;background:#00ff41;opacity:0.4}.tool-btn{width:36px;height:36px;background:#000;border:2px solid #00ff41;color:#00ff41;font-size:18px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;box-shadow:0 0 8px rgba(0, 255, 0, 0.25);padding:0;line-height:1}.tool-btn:hover:not(:disabled){transform:scale(1.08);box-shadow:0 0 18px rgba(0, 255, 0, 0.6)}.tool-btn:active:not(:disabled){transform:scale(0.92)}.tool-btn.active{background:#00ff41;color:#000;box-shadow:0 0 22px rgba(0, 255, 0, 0.9)}.tool-btn:disabled{opacity:0.3;cursor:not-allowed;box-shadow:none}.tool-btn.danger{border-color:#ff0040;color:#ff0040;box-shadow:0 0 8px rgba(255, 0, 64, 0.3)}.tool-btn.danger:hover{background:#ff0040;color:#000;box-shadow:0 0 22px rgba(255, 0, 64, 0.8)}.palette{gap:4px}.swatch{width:26px;height:26px;border:2px solid #333;border-radius:6px;cursor:pointer;transition:transform 0.15s, border-color 0.15s;padding:0}.swatch:hover{transform:scale(1.15)}.swatch.active{border-color:#fff;box-shadow:0 0 12px rgba(255, 255, 255, 0.8)}.color-picker{width:36px;height:36px;border:2px solid #00ff41;border-radius:8px;background:#000;cursor:pointer;padding:2px;box-shadow:0 0 8px rgba(0, 255, 0, 0.25)}.size-group{gap:8px;color:#00ff41;font-size:12px}.size-icon{font-size:16px}.size-label{min-width:22px;text-align:center;font-weight:bold;color:#00ff41}input[type="range"]{width:90px;accent-color:#00ff41;cursor:pointer}.canvas-host{position:relative;flex:1 1 auto;min-height:200px;border:2px solid #00ff41;border-radius:12px;overflow:hidden;box-shadow:0 0 25px rgba(0, 255, 0, 0.2)}#board{display:block;position:absolute;top:0;left:0;width:100%;height:100%;background:#000;cursor:crosshair;touch-action:none}@media (max-width:780px){.notebook-wrapper{height:calc(100vh - 70px);padding:4px 0;gap:6px}h1{font-size:18px}.toolbar{top:4px;gap:6px;padding:6px 8px;border-radius:12px}.tool-btn{width:32px;height:32px;font-size:15px}.swatch{width:22px;height:22px}.color-picker{width:32px;height:32px}input[type="range"]{width:70px}.sep{height:20px}}.transfer-group{position:relative}.transfer-menu{position:absolute;top:calc(100% + 8px);right:0;display:flex;flex-direction:column;gap:4px;padding:6px;background:#1a1a2e;border:2px solid #00ff41;border-radius:10px;box-shadow:0 0 20px rgba(0, 255, 0, 0.4);z-index:20;min-width:130px}.transfer-menu[hidden]{display:none}.transfer-item{padding:8px 12px;background:#000;border:2px solid #00ff41;color:#00ff41;font-family:'Courier New', monospace;font-size:13px;font-weight:bold;border-radius:6px;cursor:pointer;text-align:left;transition:all 0.15s}.transfer-item:hover{background:#00ff41;color:#000;box-shadow:0 0 12px rgba(0, 255, 0, 0.7)}.transfer-item:active{transform:scale(0.97)}#importFileInput{display:none}@media (max-width:780px){.transfer-menu{min-width:120px;padding:4px}.transfer-item{padding:6px 10px;font-size:12px}}</style>
 {% endraw %}
 {% endblock %}
 
@@ -38,6 +38,14 @@
                 <button id="btnNextPage" class="tool-btn" title="Следующая страница">▶</button>
             </div>
             <div class="sep"></div>
+            <div class="tool-group transfer-group">
+                <button id="btnTransfer" class="tool-btn" title="Импорт / экспорт">📦</button>
+                <div class="transfer-menu" id="transferMenu" hidden>
+                    <button id="btnExport" class="transfer-item">💾 Скачать</button>
+                    <button id="btnImport" class="transfer-item">📂 Загрузить</button>
+                </div>
+            </div>
+            <div class="sep"></div>
             <div class="tool-group">
                 <button id="btnGrid" class="tool-btn" title="Сетка (G)">▦</button>
                 <button id="btnClear" class="tool-btn danger" title="Очистить">🗑️</button>
@@ -48,6 +56,7 @@
         <div class="canvas-host">
             <canvas id="board"></canvas>
         </div>
+    <input type="file" id="importFileInput" accept="application/json,.json">
     </div>
 {% endblock %}
 
@@ -151,7 +160,132 @@ const Storage = {
         } catch (e) {
             console.warn('Storage.clearAllPages error:', e);
         }
-    }
+    },
+
+        // ============================================
+    //  Экспорт / импорт всех данных блокнота
+    // ============================================
+
+    /**
+     * Собирает объект со всеми страницами блокнота для сохранения в файл.
+     * Читает ТОЛЬКО ключи с префиксом CONFIG.STORAGE_PAGE_PREFIX
+     * и CONFIG.STORAGE_INDEX_KEY.
+     */
+    exportAll() {
+        const index = this.loadIndex() || { pages: [], active: 0 };
+        const pages = {};
+
+        (index.pages || []).forEach(id => {
+            pages[id] = this.loadPage(id);
+        });
+
+        return {
+            app: 'notebook',
+            version: 1,
+            exportedAt: new Date().toISOString(),
+            pagesCount: (index.pages || []).length,
+            activeIndex: index.active || 0,
+            pages: pages
+        };
+    },
+
+    /**
+     * Проверяет, что файл наш и что формат понятен.
+     * Ничего не пишет в localStorage.
+     */
+    validateImport(data) {
+        if (!data || typeof data !== 'object') {
+            return { ok: false, error: 'Файл не содержит JSON-объекта' };
+        }
+        if (data.app !== 'notebook') {
+            return { ok: false, error: 'Это файл другого приложения' };
+        }
+        if (typeof data.version !== 'number' || data.version < 1) {
+            return { ok: false, error: 'Неизвестная версия файла' };
+        }
+        if (!data.pages || typeof data.pages !== 'object') {
+            return { ok: false, error: 'В файле нет данных страниц' };
+        }
+        return { ok: true };
+    },
+
+    /**
+     * Удаляет из localStorage ТОЛЬКО наши ключи — notebook_page_* и
+     * notebook_pages_index. Ничего чужого (csrf, сессии и т.п.) не трогает.
+     */
+    clearNotebookKeys() {
+        try {
+            const idx = this.loadIndex();
+            if (idx && Array.isArray(idx.pages)) {
+                idx.pages.forEach(id => {
+                    localStorage.removeItem(CONFIG.STORAGE_PAGE_PREFIX + id);
+                });
+            }
+            localStorage.removeItem(CONFIG.STORAGE_INDEX_KEY);
+        } catch (e) {
+            console.warn('Storage.clearNotebookKeys error:', e);
+        }
+    },
+
+    /**
+     * Заменяет содержимое блокнота данными из файла.
+     * Порядок:
+     *   1. Валидация уже прошла до вызова.
+     *   2. Собираем id страниц из файла, обрезаем/дополняем до MAX_PAGES.
+     *   3. Удаляем старые notebook_* ключи.
+     *   4. Пишем новые.
+     *   5. Возвращаем актуальный { pages: [...], active: N }
+     *      чтобы Notebook мог обновить своё состояние.
+     */
+    importAll(data) {
+        const max = CONFIG.MAX_PAGES;
+
+        // id страниц из файла
+        let pageIds = Object.keys(data.pages || {});
+
+        // Сортируем "p1, p2, ..., p10" — числовая сортировка по цифрам
+        pageIds.sort((a, b) => {
+            const na = parseInt(String(a).replace(/\D/g, ''), 10) || 0;
+            const nb = parseInt(String(b).replace(/\D/g, ''), 10) || 0;
+            return na - nb;
+        });
+
+        // Обрезаем до MAX_PAGES
+        pageIds = pageIds.slice(0, max);
+
+        // Дополняем пустыми, если в файле было меньше
+        let nextNum = 1;
+        while (pageIds.length < max) {
+            let candidate = 'p' + nextNum;
+            while (pageIds.includes(candidate)) {
+                nextNum++;
+                candidate = 'p' + nextNum;
+            }
+            pageIds.push(candidate);
+            nextNum++;
+        }
+
+        // Удаляем старые ключи
+        this.clearNotebookKeys();
+
+        // Пишем новые
+        pageIds.forEach(id => {
+            const strokes = Array.isArray(data.pages[id]) ? data.pages[id] : [];
+            if (strokes.length) {
+                this.savePage(id, strokes);
+            }
+        });
+
+        const active = Math.min(
+            Math.max(0, data.activeIndex || 0),
+            pageIds.length - 1
+        );
+
+        const index = { pages: pageIds, active };
+        this.saveIndex(index);
+
+        return index;
+    },
 };
 const Strokes = {
     list: [],
@@ -501,10 +635,16 @@ const Toolbar = {
         this.prevPageBtn = document.getElementById('btnPrevPage');
         this.nextPageBtn = document.getElementById('btnNextPage');
         this.pageLabel   = document.getElementById('pageLabel');
+        this.transferBtn  = document.getElementById('btnTransfer');
+        this.transferMenu = document.getElementById('transferMenu');
+        this.exportBtn    = document.getElementById('btnExport');
+        this.importBtn    = document.getElementById('btnImport');
+        this.importInput  = document.getElementById('importFileInput');
         this.colorInput = document.getElementById('colorPicker');
         this.sizeInput = document.getElementById('sizeSlider');
         this.sizeLabel = document.getElementById('sizeLabel');
         this.paletteEl = document.getElementById('palette');
+
 
         // Инструменты
         this.penBtn.onclick = () => this.setTool('pen');
@@ -542,6 +682,7 @@ const Toolbar = {
 
         // Стартуем с ручки и подтягиваем её сохранённый размер
         this.setTool('pen');
+        this.initTransferMenu(notebook);
         this.updateUndoRedo();
         this.updatePageControls();
     },
@@ -587,14 +728,66 @@ const Toolbar = {
         this.undoBtn.disabled = Strokes.history.length === 0;
         this.redoBtn.disabled = Strokes.redoStack.length === 0;
     },
-    
+
     updatePageControls() {
         const p = Notebook.currentPageNumber;
         const total = CONFIG.MAX_PAGES;
         this.pageLabel.textContent = p + ' / ' + total;
         this.prevPageBtn.disabled = (p <= 1);
         this.nextPageBtn.disabled = (p >= total);
-    }
+    },
+
+        initTransferMenu(notebook) {
+        const openMenu = () => {
+            this.transferMenu.hidden = false;
+        };
+        const closeMenu = () => {
+            this.transferMenu.hidden = true;
+        };
+        const toggleMenu = (e) => {
+            e.stopPropagation();
+            this.transferMenu.hidden ? openMenu() : closeMenu();
+        };
+
+        // Открыть/закрыть по клику на 📦
+        this.transferBtn.onclick = toggleMenu;
+
+        // Экспорт
+        this.exportBtn.onclick = (e) => {
+            e.stopPropagation();
+            closeMenu();
+            notebook.exportToFile();
+        };
+
+        // Импорт — открыть системный диалог выбора файла
+        this.importBtn.onclick = (e) => {
+            e.stopPropagation();
+            closeMenu();
+            this.importInput.value = '';   // чтобы повторный выбор того же файла сработал
+            this.importInput.click();
+        };
+
+        // Когда пользователь выбрал файл
+        this.importInput.onchange = () => {
+            const file = this.importInput.files && this.importInput.files[0];
+            if (file) notebook.importFromFile(file);
+        };
+
+        // Клик вне меню — закрыть
+        document.addEventListener('click', (e) => {
+            if (this.transferMenu.hidden) return;
+            if (this.transferMenu.contains(e.target)) return;
+            if (e.target === this.transferBtn) return;
+            closeMenu();
+        });
+
+        // Esc — закрыть
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !this.transferMenu.hidden) {
+                closeMenu();
+            }
+        });
+    },
 
 };
 const Notebook = {
@@ -751,7 +944,75 @@ const Notebook = {
         const on = Renderer.toggleGrid();
         Toolbar.gridBtn.classList.toggle('active', on);
         Renderer.redrawAll(Strokes.list);
-    }
+    },
+
+        // ============================================
+    //  Импорт / экспорт
+    // ============================================
+
+    exportToFile() {
+        const data = Storage.exportAll();
+
+        const json = JSON.stringify(data, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+
+        // Имя файла: notebook-2026-09-17.json
+        const d = new Date();
+        const pad = (n) => String(n).padStart(2, '0');
+        const fname = `notebook-${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}.json`;
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fname;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    },
+
+    async importFromFile(file) {
+        if (!file) return;
+
+        let data;
+        try {
+            const text = await file.text();
+            data = JSON.parse(text);
+        } catch (e) {
+            alert('Не удалось прочитать файл: ' + e.message);
+            return;
+        }
+
+        const check = Storage.validateImport(data);
+        if (!check.ok) {
+            alert('Неверный файл: ' + check.error);
+            return;
+        }
+
+        const msg = `Заменить текущий блокнот данными из файла?\n\n`
+                  + `Страниц в файле: ${data.pagesCount || Object.keys(data.pages).length}\n`
+                  + `Текущее содержимое всех страниц будет потеряно.`;
+
+        if (!confirm(msg)) return;
+
+        // Применяем
+        const newIndex = Storage.importAll(data);
+
+        // Обновляем состояние Notebook
+        this.pageIndex = newIndex.pages;
+        this.activeIdx = newIndex.active;
+        this.currentPageNumber = newIndex.active + 1;
+
+        // Перезагружаем активную страницу и перерисовываем
+        this.loadActivePage();
+        Renderer.redrawAll(Strokes.list);
+
+        Toolbar.updateUndoRedo();
+        Toolbar.updatePageControls();
+
+        // Небольшое уведомление
+        alert('Блокнот загружен из файла.');
+    },
 };
 window.addEventListener('DOMContentLoaded', () => {
     Notebook.init();

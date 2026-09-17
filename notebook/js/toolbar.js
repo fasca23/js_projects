@@ -32,10 +32,16 @@ const Toolbar = {
         this.prevPageBtn = document.getElementById('btnPrevPage');
         this.nextPageBtn = document.getElementById('btnNextPage');
         this.pageLabel   = document.getElementById('pageLabel');
+        this.transferBtn  = document.getElementById('btnTransfer');
+        this.transferMenu = document.getElementById('transferMenu');
+        this.exportBtn    = document.getElementById('btnExport');
+        this.importBtn    = document.getElementById('btnImport');
+        this.importInput  = document.getElementById('importFileInput');
         this.colorInput = document.getElementById('colorPicker');
         this.sizeInput = document.getElementById('sizeSlider');
         this.sizeLabel = document.getElementById('sizeLabel');
         this.paletteEl = document.getElementById('palette');
+
 
         // Инструменты
         this.penBtn.onclick = () => this.setTool('pen');
@@ -73,6 +79,7 @@ const Toolbar = {
 
         // Стартуем с ручки и подтягиваем её сохранённый размер
         this.setTool('pen');
+        this.initTransferMenu(notebook);
         this.updateUndoRedo();
         this.updatePageControls();
     },
@@ -118,13 +125,65 @@ const Toolbar = {
         this.undoBtn.disabled = Strokes.history.length === 0;
         this.redoBtn.disabled = Strokes.redoStack.length === 0;
     },
-    
+
     updatePageControls() {
         const p = Notebook.currentPageNumber;
         const total = CONFIG.MAX_PAGES;
         this.pageLabel.textContent = p + ' / ' + total;
         this.prevPageBtn.disabled = (p <= 1);
         this.nextPageBtn.disabled = (p >= total);
-    }
+    },
+
+        initTransferMenu(notebook) {
+        const openMenu = () => {
+            this.transferMenu.hidden = false;
+        };
+        const closeMenu = () => {
+            this.transferMenu.hidden = true;
+        };
+        const toggleMenu = (e) => {
+            e.stopPropagation();
+            this.transferMenu.hidden ? openMenu() : closeMenu();
+        };
+
+        // Открыть/закрыть по клику на 📦
+        this.transferBtn.onclick = toggleMenu;
+
+        // Экспорт
+        this.exportBtn.onclick = (e) => {
+            e.stopPropagation();
+            closeMenu();
+            notebook.exportToFile();
+        };
+
+        // Импорт — открыть системный диалог выбора файла
+        this.importBtn.onclick = (e) => {
+            e.stopPropagation();
+            closeMenu();
+            this.importInput.value = '';   // чтобы повторный выбор того же файла сработал
+            this.importInput.click();
+        };
+
+        // Когда пользователь выбрал файл
+        this.importInput.onchange = () => {
+            const file = this.importInput.files && this.importInput.files[0];
+            if (file) notebook.importFromFile(file);
+        };
+
+        // Клик вне меню — закрыть
+        document.addEventListener('click', (e) => {
+            if (this.transferMenu.hidden) return;
+            if (this.transferMenu.contains(e.target)) return;
+            if (e.target === this.transferBtn) return;
+            closeMenu();
+        });
+
+        // Esc — закрыть
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !this.transferMenu.hidden) {
+                closeMenu();
+            }
+        });
+    },
 
 };

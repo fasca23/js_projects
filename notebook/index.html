@@ -36,6 +36,14 @@
                 <button id="btnNextPage" class="tool-btn" title="Следующая страница">▶</button>
             </div>
             <div class="sep"></div>
+            <div class="tool-group transfer-group">
+                <button id="btnTransfer" class="tool-btn" title="Импорт / экспорт">📦</button>
+                <div class="transfer-menu" id="transferMenu" hidden>
+                    <button id="btnExport" class="transfer-item">💾 Скачать</button>
+                    <button id="btnImport" class="transfer-item">📂 Загрузить</button>
+                </div>
+            </div>
+            <div class="sep"></div>
             <div class="tool-group">
                 <button id="btnGrid" class="tool-btn" title="Сетка (G)">▦</button>
                 <button id="btnClear" class="tool-btn danger" title="Очистить">🗑️</button>
@@ -46,6 +54,7 @@
         <div class="canvas-host">
             <canvas id="board"></canvas>
         </div>
+    <input type="file" id="importFileInput" accept="application/json,.json">
     </div>
 
     <script src="js/config.js"></script>

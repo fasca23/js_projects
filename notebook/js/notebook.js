@@ -152,5 +152,73 @@ const Notebook = {
         const on = Renderer.toggleGrid();
         Toolbar.gridBtn.classList.toggle('active', on);
         Renderer.redrawAll(Strokes.list);
-    }
+    },
+
+        // ============================================
+    //  Импорт / экспорт
+    // ============================================
+
+    exportToFile() {
+        const data = Storage.exportAll();
+
+        const json = JSON.stringify(data, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+
+        // Имя файла: notebook-2026-09-17.json
+        const d = new Date();
+        const pad = (n) => String(n).padStart(2, '0');
+        const fname = `notebook-${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}.json`;
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fname;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    },
+
+    async importFromFile(file) {
+        if (!file) return;
+
+        let data;
+        try {
+            const text = await file.text();
+            data = JSON.parse(text);
+        } catch (e) {
+            alert('Не удалось прочитать файл: ' + e.message);
+            return;
+        }
+
+        const check = Storage.validateImport(data);
+        if (!check.ok) {
+            alert('Неверный файл: ' + check.error);
+            return;
+        }
+
+        const msg = `Заменить текущий блокнот данными из файла?\n\n`
+                  + `Страниц в файле: ${data.pagesCount || Object.keys(data.pages).length}\n`
+                  + `Текущее содержимое всех страниц будет потеряно.`;
+
+        if (!confirm(msg)) return;
+
+        // Применяем
+        const newIndex = Storage.importAll(data);
+
+        // Обновляем состояние Notebook
+        this.pageIndex = newIndex.pages;
+        this.activeIdx = newIndex.active;
+        this.currentPageNumber = newIndex.active + 1;
+
+        // Перезагружаем активную страницу и перерисовываем
+        this.loadActivePage();
+        Renderer.redrawAll(Strokes.list);
+
+        Toolbar.updateUndoRedo();
+        Toolbar.updatePageControls();
+
+        // Небольшое уведомление
+        alert('Блокнот загружен из файла.');
+    },
 };

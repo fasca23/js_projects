@@ -250,3 +250,73 @@ input[type="range"] {
         height: 20px;
     }
 }
+
+/* ============================================
+   Кнопка импорт/экспорт с мини-меню
+   ============================================ */
+
+.transfer-group {
+    position: relative;
+}
+
+.transfer-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 6px;
+    background: #1a1a2e;
+    border: 2px solid #00ff41;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
+    z-index: 20;
+    min-width: 130px;
+}
+
+.transfer-menu[hidden] {
+    display: none;
+}
+
+.transfer-item {
+    padding: 8px 12px;
+    background: #000;
+    border: 2px solid #00ff41;
+    color: #00ff41;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+}
+
+.transfer-item:hover {
+    background: #00ff41;
+    color: #000;
+    box-shadow: 0 0 12px rgba(0, 255, 0, 0.7);
+}
+
+.transfer-item:active {
+    transform: scale(0.97);
+}
+
+/* Скрытый input для выбора файла */
+#importFileInput {
+    display: none;
+}
+
+/* Мобильные — компактнее */
+@media (max-width: 780px) {
+    .transfer-menu {
+        min-width: 120px;
+        padding: 4px;
+    }
+
+    .transfer-item {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+}
